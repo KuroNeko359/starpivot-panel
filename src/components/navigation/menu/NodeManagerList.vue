@@ -30,14 +30,13 @@ function navigateTo(nodeName: string) {
 </script>
 
 <template>
-  <menu-directory title="节点列表">
-    <menu-item
-        @click="navigateTo(nodeName)"
-        v-for="nodeName in menuItems"
-        :key="nodeName"
-        :title="nodeName"
-    ></menu-item>
-  </menu-directory>
+  <menu-item
+      @click="navigateTo(nodeName)"
+      v-for="nodeName in menuItems"
+      :key="nodeName"
+      :title="nodeName"
+  ></menu-item>
+
 </template>
 
 

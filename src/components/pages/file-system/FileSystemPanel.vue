@@ -24,17 +24,6 @@ let props = defineProps({
   },
 });
 
-// 监听分页属性的变化，重新请求数据
-// watch(
-//     () => paginationProps.value.currentPage,
-//     async (newPage) => {
-//       // 获取文件数据并更新分页
-//       files.value = splitArray(
-//           (await hadoopFileSystemApi.getFiles(props.path)).data
-//       );
-//     }
-// );
-
 
 onMounted(async () => {
   // 初次获取文件数据

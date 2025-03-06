@@ -3,6 +3,10 @@
 import ThemeSwap from "../common/functional/ThemeController.vue";
 import Singal from "../ui/icon/Singal.vue";
 import FullScreenController from "../common/functional/FullScreenController.vue";
+import {useI18n} from "vue-i18n";
+import LanguageController from "@/components/common/functional/LanguageController.vue";
+
+const { t, d, n, tm, locale } = useI18n({ useScope: 'global' })
 </script>
 
 <template>
@@ -25,9 +29,11 @@ import FullScreenController from "../common/functional/FullScreenController.vue"
     <div class="mx-2 flex-1 px-2"></div>
     <div class=" flex-none lg:block">
       <div class="flex">
+
+
         <full-screen-controller></full-screen-controller>
-        <singal></singal>
         <theme-swap></theme-swap>
+        <language-controller></language-controller>
       </div>
       <slot></slot>
     </div>

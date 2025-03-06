@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {ref} from "vue";
 
+
 defineProps({
   color: {
     type: String,

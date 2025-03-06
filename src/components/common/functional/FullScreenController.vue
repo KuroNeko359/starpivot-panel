@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import MaximizationIcon from "@/components/icons/window-controller-icon/MaximizationIcon.vue";
+import ReductionIcon from "@/components/icons/window-controller-icon/ReductionIcon.vue";
 
 const isFullScreen = ref(true);
 
@@ -43,32 +45,9 @@ const toggleScreenStatus = () => {
     <input type="checkbox" @click="toggleFullScreen" />
 
     <!-- 全屏图标 -->
-    <svg class="swap-off h-10 w-10"
-         width="25" stroke="currentColor" height="25" viewBox="0 0 48 48" fill="none"
-         xmlns="http://www.w3.org/2000/svg">
-      <path d="M6 6L16 15.8995" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M6 41.8995L16 32" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M42.0001 41.8995L32.1006 32" stroke-width="4" stroke-linecap="round"
-            stroke-linejoin="round"/>
-      <path d="M41.8995 6L32 15.8995" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M33 6H42V15" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M42 33V42H33" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M15 42H6V33" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M6 15V6H15" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+    <maximization-icon></maximization-icon>
     <!-- 缩小图标 -->
-    <svg class="swap-on h-10 w-10" stroke="currentColor" width="25" height="25" viewBox="0 0 48 48" fill="none"
-         xmlns="http://www.w3.org/2000/svg">
-      <path d="M6 6L16 15.8995" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M6 41.8995L16 32" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M42.0001 41.8995L32.1006 32" stroke-width="4" stroke-linecap="round"
-            stroke-linejoin="round"/>
-      <path d="M41.8995 6L32 15.8995" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M32 7V16H41" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M16 7V16H7" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M16 41V32H7" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M32 41V32H40.8995" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+    <reduction-icon></reduction-icon>
   </label>
 </template>
 

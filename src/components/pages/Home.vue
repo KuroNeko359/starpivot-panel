@@ -1,12 +1,15 @@
 <script setup lang="ts">
 
 import ModalButton from "../ui/modal/ModalButton.vue";
+import {useI18n} from "vue-i18n";
+
+const {t} = useI18n();
 </script>
 
 <template>
-  Home Page
+  {{ t('message.hello') }}
   <div class="drawer drawer-end">
-    <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
+    <input id="my-drawer-4" type="checkbox" class="drawer-toggle"/>
     <div class="drawer-content">
       <!-- Page content here -->
       <label for="my-drawer-4" class="drawer-button btn btn-primary">Open drawer</label>
@@ -16,15 +19,24 @@ import ModalButton from "../ui/modal/ModalButton.vue";
       <ul class="menu bg-base-200 text-base-content min-h-full w-80 p-4">
         <!-- Sidebar content here -->
         <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>        <li><a>Sidebar Item 1</a></li>
+        <li><a>Sidebar Item 2</a></li>
+        <li><a>Sidebar Item 1</a></li>
+        <li><a>Sidebar Item 2</a></li>
+        <li><a>Sidebar Item 1</a></li>
+        <li><a>Sidebar Item 2</a></li>
+        <li><a>Sidebar Item 1</a></li>
+        <li><a>Sidebar Item 2</a></li>
+        <li><a>Sidebar Item 1</a></li>
+        <li><a>Sidebar Item 2</a></li>
+        <li><a>Sidebar Item 1</a></li>
+        <li><a>Sidebar Item 2</a></li>
+        <li><a>Sidebar Item 1</a></li>
+        <li><a>Sidebar Item 2</a></li>
+        <li><a>Sidebar Item 1</a></li>
+        <li><a>Sidebar Item 2</a></li>
+        <li><a>Sidebar Item 1</a></li>
+        <li><a>Sidebar Item 2</a></li>
+        <li><a>Sidebar Item 1</a></li>
         <li><a>Sidebar Item 2</a></li>
       </ul>
     </div>

@@ -3,7 +3,7 @@ import BreadcurmbsNode from "./BreadcurmbsNode.vue";
 import {pathStringToList} from "@/utils/domain.ts";
 
 let props = defineProps({
-  path : {
+  path: {
     type: String,
     required: true,
   }
@@ -17,20 +17,20 @@ console.log(filePathList)
 <template>
   <div class="breadcrumbs text-sm">
     <ul>
-<!--      &lt;!&ndash;      根目录&ndash;&gt;-->
+      <!--      &lt;!&ndash;      根目录&ndash;&gt;-->
       <breadcurmbs-node
-        title="/"
-        :directory-index="0"
-        :directory-list="['']"
+          title="/"
+          :directory-index="0"
+          :directory-list="['']"
       ></breadcurmbs-node>
 
       <!--      子目录-->
       <breadcurmbs-node
-        :directory-list="filePathList"
-        :directory-index="index"
-        :title="filePathList[index]"
-        :key="index"
-        v-for="(_,index) in filePathList"
+          :directory-list="filePathList"
+          :directory-index="index"
+          :title="filePathList[index]"
+          :key="index"
+          v-for="(_,index) in filePathList"
       ></breadcurmbs-node>
 
 
