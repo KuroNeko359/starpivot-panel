@@ -20,8 +20,8 @@ onMounted(() => {
 
 const i18n = createI18n({
     legacy: false, // 使用 Composition API
-    locale: "zh", // 默认语言
-    fallbackLocale: "en", // 回退语言
+    locale: Language.ZH, // 默认语言
+    fallbackLocale: Language.EN, // 回退语言
     messages
 })
 
