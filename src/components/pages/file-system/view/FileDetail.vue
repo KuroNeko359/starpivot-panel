@@ -123,8 +123,6 @@ console.log(props.file)
                @click="handleGetContentClick(FileContentMode.TAIL)"
             >{{ t('file-detail.get-tail') }}</a>
           </div>
-
-
         </div>
       </div>
       <!--Activity-->

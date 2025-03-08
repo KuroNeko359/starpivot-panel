@@ -105,6 +105,22 @@ const getPathFromUrl = (url: string) => {
   return new URL(url).pathname;
 }
 
+/**
+ * 从时间戳格式化为时间字符串
+ * @param timestamp 时间戳(精确到毫秒)
+ */
+const timestampToDate = (timestamp: number) => {
+  return new Date(timestamp).toLocaleString();
+}
+
+/**
+ *
+ */
+const addComponent = () => {
+  console.log("添加组件")
+}
+
+let showDetail = ref(false);
 </script>
 
 <template>
@@ -127,26 +143,35 @@ const getPathFromUrl = (url: string) => {
       </thead>
       <tbody>
       <tr v-for="(file, index) in currentFiles" :key="file.name">
-        <th>{{ index + 1 }}</th>
-        <td class="text-xl text-base-content">{{ file.permission }}</td>
-        <td class="text-xl">{{ file.owner }}</td>
-        <td class="text-xl">{{ file.group }}</td>
-        <td class="text-xl">{{ file.length }} B</td>
-        <td class="text-xl">{{ file.modificationTime }}</td>
-        <td class="text-xl">{{ file.blockReplication }}</td>
-        <td class="text-xl">{{ (file.blockSize / 1024 / 1024).toFixed(2) }} Mb</td>
-        <td class="text-xl">
+        <th class="text-s">{{ index + 1 }}</th>
+        <td class="text-base">{{ file.permission }}</td>
+        <td class="text-base">{{ file.owner }}</td>
+        <td class="text-base">{{ file.group }}</td>
+        <td class="text-base">{{ file.length }} B</td>
+        <td class="text-base">{{ timestampToDate(file.modificationTime) }}</td>
+        <td class="text-base">{{ file.blockReplication }}</td>
+        <td class="text-base">{{ (file.blockSize / 1024 / 1024).toFixed(2) }} Mb</td>
+        <td class="text-base">
           <!--点击文件夹逻辑-->
           <router-link v-if="file.dir" class="link link-primary"
                        :to="{path: '/explore', query: {path: file.path}}">
             {{ file.name }}
           </router-link>
           <!--点击文件逻辑-->
-          <label v-else class="link link-primary" :for="file.path">
+          <label
+              v-else
+              class="link link-primary"
+              :for="file.path"
+              @click="showDetail = true"
+          >
             {{ file.name }}
           </label>
+          <!--在label被点击时才会生成组件-->
+          <file-detail
+              v-if="showDetail"
+              :file="file"
+          ></file-detail>
 
-          <file-detail :file="file"></file-detail>
         </td>
       </tr>
 
