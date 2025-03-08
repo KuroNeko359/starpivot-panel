@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import Card from "@/components/container/Card.vue";
+import Card from "@/components/common/Card.vue";
 import PrimaryButton from "@/components/common/button/PrimaryButton.vue";
 import FileSystemPanel from "@/components/pages/file-system/FileSystemPanel.vue";
 import Modal from "@/components/ui/modal/Modal.vue";
@@ -9,18 +9,20 @@ import {useRoute} from "vue-router";
 import {computed, ref} from "vue";
 
 import FileSystemView from "./view/FileSystemView.vue";
+import {getT} from "@/i18n/language-utils.ts";
 
 const route = useRoute();
 
 let filePath = ref<string>(route.query.path as string || '/');
 console.log(filePath.value)
+let t = getT();
 
 </script>
 
 <template>
   <!--  Page -> Panel -> -->
 
-  <card title="文件系统" class="w-full min-w-[50%]">
+  <card :title="t('file-system')" class="w-full min-w-[50%]">
 
     <FileSystemPanel :path="filePath"></FileSystemPanel>
 

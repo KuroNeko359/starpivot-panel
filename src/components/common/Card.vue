@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import MemoryPie from "../common/charts/MemoryPie.vue";
-import Pie from "../common/charts/Pie.vue";
+import MemoryPie from "./charts/MemoryPie.vue";
+import Pie from "./charts/Pie.vue";
 import {ref} from "vue";
 
 let paragraph = ref("");

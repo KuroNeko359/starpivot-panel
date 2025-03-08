@@ -5,7 +5,11 @@ import MainContainer from "@/components/container/MainContainer.vue";
 import Test from "@/components/Test.vue";
 import FileSystemPage from "@/components/pages/file-system/FileSystemPage.vue";
 import {useRoute} from "vue-router";
+import {setupLanguage} from "@/i18n/language-utils.ts";
+
 let route = useRoute();
+
+setupLanguage()
 
 </script>
 

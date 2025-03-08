@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import memoryApi from "../../../../api/memory.ts";
 import Shield from "../../../ui/icon/Shield.vue";
 import {SystemMemory, JVMMemory, Memory, MemoryUsageRate} from "./Memory.ts";
+import {getT} from "@/i18n/language-utils.ts";
 
 /**
  * 用于存储圆圈的颜色类名，初始值为 "text-success"。
  * 颜色类名用于动态改变圆圈的颜色，以反映内存使用状态。
  */
 const circleColor = ref("text-success");
-/**
- * 用于存储提示信息，根据内存使用情况显示不同的提示，如 "错误"、"警告"、"一切都好"。
- */
-let prompt = ref("");
+
 /**
  * 用于存储内存信息，类型为 Memory 或 null。
  * 初始值为 null，在获取到内存信息后更新。
@@ -32,6 +30,8 @@ const props = defineProps<{
   type: string;
   pieName: string;
 }>();
+
+let t = getT();
 
 /**
  * 异步函数，用于获取内存状态。
@@ -62,13 +62,10 @@ const updateColor = () => {
   // 检查 memoryUsageRate 是否为有效的数字
   if (usedMemoryRate.value > 0.85) {
     circleColor.value = "text-error";
-    prompt.value = "高危告急";
   } else if (usedMemoryRate.value > 0.6) {
-    prompt.value = "临界预警";
     circleColor.value = "text-warning";
   } else {
     // 如果 memoryUsageRate 小于等于 0.5，恢复默认颜色
-    prompt.value = "一切都好";
     circleColor.value = "text-success";
   }
 };
@@ -107,6 +104,22 @@ const onClick = () => {
   console.log("onClick");
 }
 
+
+/**
+ * 获取Prompt的内容
+ */
+const getPrompt = () => {
+  // 检查 memoryUsageRate 是否为有效的数字
+  if (usedMemoryRate.value > 0.85) {
+    return t('memory-status.high-risk')
+  } else if (usedMemoryRate.value > 0.6) {
+    return t('memory-status.medium-risk')
+  } else {
+    // 如果 memoryUsageRate 小于等于 0.5，恢复默认颜色
+    return t('memory-status.low-risk')
+  }
+}
+
 </script>
 
 <template>
@@ -115,12 +128,12 @@ const onClick = () => {
     <!-- 左侧容器，占总宽度的 5/6 -->
     <div class="flex w-5/6">
       <!-- 引入 Shield 组件，传递颜色和提示信息 -->
-      <shield :color="circleColor" :prompt="prompt"></shield>
+      <shield :color="circleColor" :prompt="getPrompt()"></shield>
     </div>
     <!-- 带有提示信息的容器，鼠标悬停时显示 "打开仪表盘" -->
     <!-- label :for 控制了打开Modal-->
     <label :for="props.pieName">
-      <div class="tooltip" data-tip="打开仪表盘">
+      <div class="tooltip" :data-tip="t('memory-ring-prompt.open-panel')">
         <!-- 横向布局容器 -->
         <div class="flex flex-row">
           <!-- 空容器，用于占位 -->

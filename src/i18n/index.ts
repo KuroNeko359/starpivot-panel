@@ -1,7 +1,8 @@
-import {createI18n} from 'vue-i18n'
-import en from './locales/en.json'
-import zh from './locales/zh.json'
+import {createI18n, useI18n} from 'vue-i18n'
+import en from './locales/en/en.ts'
+import zh from './locales/zh/zh.ts'
 import {onMounted} from "vue";
+
 
 export enum Language {
     EN = 'en',
@@ -13,9 +14,6 @@ const messages = {
     zh
 }
 
-onMounted(() => {
-    //TODO 挂载组件时 自动读取设置的语言
-})
 
 
 const i18n = createI18n({
@@ -25,4 +23,4 @@ const i18n = createI18n({
     messages
 })
 
-export default {i18n, Language}
+export default i18n

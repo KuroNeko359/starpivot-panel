@@ -24,7 +24,7 @@ defineProps({
             clip-rule="evenodd">
       </path>
     </svg>
-    <h1 class="text-3xl">{{ prompt }}</h1>
+    <h1 class="text-3xl w-10">{{ prompt }}</h1>
   </div>
 </template>
 

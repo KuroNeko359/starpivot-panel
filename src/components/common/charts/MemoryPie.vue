@@ -3,6 +3,7 @@ import * as echarts from 'echarts';
 import {onMounted, ref} from "vue";
 import memoryApi from "../../../api/memory.ts";
 import type {Memory} from "./MemoryRing/Memory.ts";
+import {getT} from "@/i18n/language-utils.ts";
 
 const chartRef = ref<HTMLElement | null>(null);
 
@@ -111,12 +112,14 @@ let props = defineProps({
     validator: (value: string) => ["system", "jvm"].includes(value),
   }
 });
+
+let t = getT();
 </script>
 
 <template>
   <div class="chart-container h-60 w-full" ref="chartRef"></div>
   <a @click="updateChart" class="btn">
-    Refresh
+    {{ t('refresh') }}
   </a>
 </template>
 

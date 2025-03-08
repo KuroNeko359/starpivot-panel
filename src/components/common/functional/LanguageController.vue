@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import {useI18n} from "vue-i18n";
 import LanguageIcon from "@/components/icons/language-controller-icon/LanguageIcon.vue";
 import {Language} from "@/i18n";
+import {getLocale, setLocalStorageLanguage} from "@/i18n/language-utils.ts";
 
-const {locale} = useI18n();
-
-
+let locale = getLocale();
 
 const changeLanguage = (language: Language) => {
   switch (language) {
     case Language.EN:
       locale.value = language;
+      setLocalStorageLanguage(Language.EN);
       break;
     case Language.ZH:
       locale.value = language;
+      setLocalStorageLanguage(Language.ZH);
       break;
   }
 }
