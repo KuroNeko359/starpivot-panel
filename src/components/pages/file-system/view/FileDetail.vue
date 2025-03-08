@@ -127,8 +127,8 @@ console.log(props.file)
       </div>
       <!--Activity-->
       <div class="border-b-[1px] border-base-300 py-2">
-        <div>Size: {{file.locations[0].length}} B</div>
-        <p class="text-base">Activity:</p>
+        <div>{{t('file-detail.size')}}: {{file.locations[0].length}}</div>
+        <p class="text-base">{{t('file-detail.activity')}}:</p>
         <div v-for="host in file.locations[0].hosts" class="flex flex-row pl-4">
           <div aria-label="success" class="m-1 status-md status status-success"></div>
           <p class="text-sm">

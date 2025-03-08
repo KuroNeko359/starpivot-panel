@@ -21,6 +21,7 @@ import type {IFile} from "../ts/file-system.ts";
 import router from "../../../../router";
 import FileDetail from "./FileDetail.vue";
 import Alert from "../../../common/alert/Alert.vue";
+import {getT} from "@/i18n/language-utils.ts";
 
 interface PaginationProps {
   pageNumber: number;
@@ -121,6 +122,8 @@ const addComponent = () => {
 }
 
 let showDetail = ref(false);
+
+var t = getT();
 </script>
 
 <template>
@@ -131,14 +134,14 @@ let showDetail = ref(false);
       <thead>
       <tr>
         <th></th>
-        <th>Permission</th>
-        <th>Owner</th>
-        <th>Group</th>
-        <th>Size</th>
-        <th>Last Modified</th>
-        <th>Replication</th>
-        <th>Block Size</th>
-        <th>Name</th>
+        <th>{{t('file-table-column.permission')}}</th>
+        <th>{{t('file-table-column.owner')}}</th>
+        <th>{{t('file-table-column.group')}}</th>
+        <th>{{t('file-table-column.size')}}</th>
+        <th>{{t('file-table-column.last-modified')}}</th>
+        <th>{{t('file-table-column.replication')}}</th>
+        <th>{{t('file-table-column.block-size')}}</th>
+        <th>{{t('file-table-column.name')}}</th>
       </tr>
       </thead>
       <tbody>
