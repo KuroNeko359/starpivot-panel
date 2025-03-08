@@ -127,7 +127,19 @@ console.log(props.file)
 
         </div>
       </div>
-      <textarea class="w-full h-60 textarea textarea-border max-w-none resize-none"
+      <!--Activity-->
+      <div class="border-b-[1px] border-base-300 py-2">
+        <div>Size: {{file.locations[0].length}} B</div>
+        <p class="text-base">Activity:</p>
+        <div v-for="host in file.locations[0].hosts" class="flex flex-row pl-4">
+          <div aria-label="success" class="m-1 status-md status status-success"></div>
+          <p class="text-sm">
+            {{ host }}
+          </p>
+        </div>
+      </div>
+      <!--BlockLocations-->
+      <textarea class="w-full h-40 textarea textarea-border max-w-none resize-none"
                 placeholder="Content...">{{fileContent}}</textarea>
     </div>
   </div>
