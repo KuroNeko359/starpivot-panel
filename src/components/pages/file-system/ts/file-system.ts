@@ -14,3 +14,8 @@ export interface IFile {
     symlink: string; // TODO 后端是Path类型 还未实现
     locations: any[];
 }
+
+export interface IFileContent {
+    path: string;
+    content: string;
+}

@@ -1,6 +1,10 @@
 import apiClient from "./index.ts";
 
 const hadoopFileSystemApi = {
+    /**
+     * 上传文件
+     * @param file 关于文件的FormData
+     */
     uploadFile(file: FormData) {
         return apiClient.post('/hdfs/upload-file', file, {
             headers: {
@@ -8,22 +12,39 @@ const hadoopFileSystemApi = {
             },
         });
     },
+    /**
+     * 从HDFS获取文件列表
+     * @param path HDFS中的文件路径
+     */
     getFiles(path: string) {
         let formData = new FormData();
         formData.append("path", path)
         return apiClient.post('/hdfs/files', formData);
     },
-    // async downloadFile(path: string) {
-    //     const params = {"path": path}
-    //     let hdfs = await apiClient.get('/hdfs/download-file', {params});
-    //     var blob = new Blob([hdfs.data]);
-    //     console.log(hdfs.headers);
-    //     return hdfs
-    // },
+    /**
+     * 获取文件头
+     * @param path HDFS中文件路径
+     */
     getFileHead(path: string) {
         const params = {"path": path}
         return apiClient.get('/hdfs/file-head', {params})
-    }
+    },
+    /**
+     * 获取文件尾
+     * @param path HDFS中文件路径
+     */
+    getFileTail(path: string) {
+        const params = {"path": path}
+        return apiClient.get('/hdfs/file-tail', {params})
+    },
+    /**
+     * 获取文件内容
+     * @param path HDFS中文件路径
+     */
+    getFileContent(path: string) {
+        const params = {"path": path}
+        return apiClient.get('/hdfs/file-content', {params})
+    },
 
 }
 
