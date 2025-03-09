@@ -13,8 +13,9 @@ import {getT} from "@/i18n/language-utils.ts";
 
 const route = useRoute();
 
-let filePath = ref<string>(route.query.path as string || '/');
-console.log(filePath.value)
+let encodeFilePath = ref<string>(route.query.path as string || '/');
+let filePath = decodeURIComponent(encodeFilePath.value);
+
 let t = getT();
 
 </script>

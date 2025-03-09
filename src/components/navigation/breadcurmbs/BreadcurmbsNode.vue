@@ -43,5 +43,4 @@ const jumpToFolder = (pathList: string[], index: number): string => {
 </template>
 
 <style scoped>
-/* 你可以在这里添加一些样式 */
 </style>

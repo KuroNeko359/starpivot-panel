@@ -12,6 +12,7 @@ let props = defineProps({
 let filePathList = pathStringToList(props.path);
 
 console.log(filePathList)
+
 </script>
 
 <template>
