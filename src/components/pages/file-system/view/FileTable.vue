@@ -121,7 +121,7 @@ const addComponent = () => {
   console.log("添加组件")
 }
 
-let showDetail = ref(false);
+const showDetails = ref<Record<string, boolean>>({});
 
 var t = getT();
 </script>
@@ -165,13 +165,13 @@ var t = getT();
               v-else
               class="link link-primary"
               :for="file.path"
-              @click="showDetail = true"
+              @click="showDetails[file.name] = true"
           >
             {{ file.name }}
           </label>
           <!--在label被点击时才会生成组件-->
           <file-detail
-              v-if="showDetail"
+              v-if="showDetails[file.name]"
               :file="file"
           ></file-detail>
 
