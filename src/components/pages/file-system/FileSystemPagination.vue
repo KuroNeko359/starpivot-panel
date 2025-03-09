@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import {defineProps, defineEmits} from 'vue';
+import Right from "@/components/icons/pagination-icon/Right.vue";
+import Left from "@/components/icons/pagination-icon/Left.vue";
 
 const props = defineProps({
   paginationProps: {
@@ -8,16 +10,25 @@ const props = defineProps({
   },
 });
 
-// 定义update:currentPage事件
+/**
+ * 定义更新当前页面的emit
+ */
 const emit = defineEmits<{
   (e: 'update:currentPage', pageNumber: number): void;
 }>();
 
+/**
+ * 设置当前页面
+ * @param pageNumber 新的页面编号
+ */
 const setCurrentPage = (pageNumber: number) => {
   emit('update:currentPage', pageNumber); // 发出事件来更新 currentPage
   console.log('pageNumber', pageNumber);
 }
 
+/**
+ * 设置当前页面为旧的页面编号-1
+ */
 const addCurrentPage = () => {
   let currentPage = props.paginationProps.currentPage;
   if (currentPage < props.paginationProps.pageNumber) {
@@ -25,6 +36,9 @@ const addCurrentPage = () => {
   }
 }
 
+/**
+ * 设置当前页面为旧的页面编号+1
+ */
 const reduceCurrentPage = () => {
   let currentPage = props.paginationProps.currentPage;
   if (currentPage > 1) {
@@ -36,7 +50,9 @@ const reduceCurrentPage = () => {
 <template>
   <div class="join">
     <!-- 使用 v-for 来渲染分页按钮 -->
-    <button class="join-item btn" @click="reduceCurrentPage">«</button>
+    <button class="join-item btn p-2" @click="reduceCurrentPage">
+      <left></left>
+    </button>
     <button
         class="btn"
         v-for="i in props.paginationProps.pageNumber"
@@ -48,10 +64,11 @@ const reduceCurrentPage = () => {
     >
       {{ i }}
     </button>
-    <button class="join-item btn" @click="addCurrentPage">»</button>
+    <button class="join-item btn p-2" @click="addCurrentPage">
+      <right></right>
+    </button>
   </div>
 </template>
 
 <style scoped>
-/* 你可以添加一些样式 */
 </style>

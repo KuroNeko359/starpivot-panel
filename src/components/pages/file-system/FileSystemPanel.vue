@@ -49,32 +49,44 @@ const updateCurrentPage = (pageNumber: number) => {
 </script>
 
 <template>
-  <!-- 面包屑导航 -->
-  <div class="w-full max-w-full grid grid-cols-6 gap-4">
-    <div class="pr-2 breadcurmbs rounded-sm border-1 border-base-content col-span-5 px-2">
-      <breadcurmbs :path="props.path"></breadcurmbs>
+  <div>
+    <!-- 面包屑导航 -->
+    <div class="w-full max-w-full grid grid-cols-6 gap-4">
+      <div class="pr-2 border-color-gray rounded-sm border-1 border-base-content col-span-5 px-2">
+        <breadcurmbs :path="props.path"></breadcurmbs>
+      </div>
+      <div class="basis-1/6 col-span-1">
+        <div class="flex justify-end">
+          <upload-button></upload-button>
+          <create-folder-button></create-folder-button>
+        </div>
+      </div>
     </div>
-    <div class="basis-1/6 col-span-1">
-      <div class="flex justify-end">
-        <upload-button></upload-button>
-        <create-folder-button></create-folder-button>
+
+    <!-- 表格 -->
+    <div>
+      <file-table :paginationProps="paginationProps" :files="files"/>
+    </div>
+
+    <!-- 分页组件 -->
+    <div class="grid grid-cols-6 gap-4 border-t-1 border-color-gray pt-2">
+      <div class="col-span-2">
+        <div class="flex justify-start">
+          Showing 1 to 10 of 97 results
+        </div>
+      </div>
+      <div class="col-span-4 flex justify-end">
+        <file-system-pagination
+            @update:current-page="updateCurrentPage"
+            v-model="paginationProps.currentPage"
+            :pagination-props="paginationProps"/>
       </div>
     </div>
   </div>
-
-  <!-- 表格 -->
-  <file-table :paginationProps="paginationProps" :files="files">
-
-  </file-table>
-  <!-- 分页组件 -->
-  <file-system-pagination
-      @update:current-page="updateCurrentPage"
-      v-model="paginationProps.currentPage"
-      :pagination-props="paginationProps"></file-system-pagination>
 </template>
 
 <style scoped>
-.breadcurmbs {
+.border-color-gray {
   border-color: var(--input-color);
   --input-color: color-mix(in oklab, var(--color-base-content) 20%, #0000);
 }
