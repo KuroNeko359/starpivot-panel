@@ -16,8 +16,8 @@ console.log(filePathList)
 </script>
 
 <template>
-  <div class="breadcrumbs text-sm">
-    <ul>
+  <div class="breadcrumbs text-sm" >
+    <ul class="">
       <!--      &lt;!&ndash;      根目录&ndash;&gt;-->
       <breadcurmbs-node
           title="/"
@@ -56,5 +56,8 @@ console.log(filePathList)
 </template>
 
 <style scoped>
-
+.test {
+  border: 1px solid black;
+  overflow: auto; /* 超出时显示滚动条 */
+}
 </style>

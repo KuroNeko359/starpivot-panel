@@ -6,16 +6,16 @@ import ContentContainer from "./ContentContainer.vue";
 <template>
 
 
-  <div class="drawer lg:drawer-open h-[100%]">
+  <div class="drawer lg:drawer-open">
     <input id="my-drawer-3" type="checkbox" class="drawer-toggle"/>
 
-    <div class="drawer-content flex flex-col ">
+    <div class="drawer-content">
       <content-container>
-        <!-- Navbar -->
+        <!-- 导航栏 -->
         <template v-slot:navbar>
           <slot name="navbar"></slot>
         </template>
-        <!-- Page content here -->
+        <!-- 页面内容 -->
         <template v-slot:content>
           <slot name="content"></slot>
         </template>
@@ -25,7 +25,7 @@ import ContentContainer from "./ContentContainer.vue";
     <div class="drawer-side">
       <label for="my-drawer-3" aria-label="close sidebar" class="drawer-overlay"></label>
 
-        <!-- Sidebar content here -->
+        <!-- 侧边栏-->
         <slot name="sidebar">
 
         </slot>

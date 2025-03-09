@@ -50,13 +50,15 @@ const updateCurrentPage = (pageNumber: number) => {
 
 <template>
   <!-- 面包屑导航 -->
-  <div class="flex w-full">
-    <div class="max-w-[70%] pr-2">
+  <div class="w-full max-w-full grid grid-cols-6 gap-4">
+    <div class="pr-2 breadcurmbs rounded-sm border-1 border-base-content col-span-5 px-2">
       <breadcurmbs :path="props.path"></breadcurmbs>
     </div>
-    <div class="max-w-[30%]">
-      <upload-button></upload-button>
-      <create-folder-button></create-folder-button>
+    <div class="basis-1/6 col-span-1">
+      <div class="flex justify-end">
+        <upload-button></upload-button>
+        <create-folder-button></create-folder-button>
+      </div>
     </div>
   </div>
 
@@ -72,4 +74,8 @@ const updateCurrentPage = (pageNumber: number) => {
 </template>
 
 <style scoped>
+.breadcurmbs {
+  border-color: var(--input-color);
+  --input-color: color-mix(in oklab, var(--color-base-content) 20%, #0000);
+}
 </style>

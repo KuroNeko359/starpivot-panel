@@ -23,8 +23,7 @@ let t = getT();
 <template>
   <!--  Page -> Panel -> -->
 
-  <card :title="t('file-system')" class="w-full min-w-[50%]">
-
+  <card :title="t('file-system')" class="w-full">
     <FileSystemPanel :path="filePath"></FileSystemPanel>
 
   </card>
