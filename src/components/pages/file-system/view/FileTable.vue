@@ -157,7 +157,7 @@ var t = getT();
         <td class="text-base">
           <!--点击文件夹逻辑-->
           <router-link v-if="file.dir" class="link link-primary"
-                       :to="{path: '/explore', query: {path: file.path}}">
+                       :to="{path: '/explore', query: {path: encodeURIComponent(file.path)}}">
             {{ file.name }}
           </router-link>
           <!--点击文件逻辑-->
