@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import ThemeSwap from "../common/functional/ThemeController.vue";
-import Singal from "../ui/icon/Singal.vue";
+import IconSingal from "@/components/icons/IconSingal.vue";
 import FullScreenController from "../common/functional/FullScreenController.vue";
 import {useI18n} from "vue-i18n";
 import LanguageController from "@/components/common/functional/LanguageController.vue";

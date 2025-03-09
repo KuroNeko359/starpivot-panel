@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import ModalButton from "../ui/modal/ModalButton.vue";
+import ModalButton from "@/components/common/modal/ModalButton.vue";
 import {useI18n} from "vue-i18n";
 
 const {t} = useI18n();

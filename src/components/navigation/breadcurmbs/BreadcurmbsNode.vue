@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Folder from "@/components/icons/Folder.vue";
+import IconFolder from "@/components/icons/IconFolder.vue";
 import {getPathBeforeFS, pathListToString} from "@/utils/domain.ts";
 
 // 定义 props
@@ -36,7 +36,7 @@ const jumpToFolder = (pathList: string[], index: number): string => {
     <RouterLink
         class="text-left"
         :to="{ path: '/explore', query: { path: jumpToFolder(props.directoryList as string[], props.directoryIndex) } }">
-      <Folder></Folder>
+      <IconFolder></IconFolder>
       {{ props.title }}
     </RouterLink>
   </li>

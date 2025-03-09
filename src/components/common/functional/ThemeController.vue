@@ -6,8 +6,8 @@
 
 <script setup lang="ts">
 import {ref, onMounted} from "vue";
-import SunIcon from "@/components/icons/theme-controller-icon/SunIcon.vue";
-import MoonIcon from "@/components/icons/theme-controller-icon/MoonIcon.vue";
+import IconSun from "@/components/icons/theme-controller-icon/IconSun.vue";
+import IconMoon from "@/components/icons/theme-controller-icon/IconMoon.vue";
 
 /**
  * 响应式变量，用于存储当前主题模式。
@@ -66,9 +66,9 @@ const toggleTheme = () => {
     />
 
     <!-- 太阳图标，代表亮色主题 -->
-    <sun-icon></sun-icon>
+    <icon-sun></icon-sun>
     <!-- 月亮图标，代表暗色主题 -->
-    <moon-icon></moon-icon>
+    <icon-moon></icon-moon>
   </label>
 </template>
 

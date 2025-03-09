@@ -3,7 +3,7 @@
 import Card from "@/components/common/Card.vue";
 import PrimaryButton from "@/components/common/button/PrimaryButton.vue";
 import FileSystemPanel from "@/components/pages/file-system/FileSystemPanel.vue";
-import Modal from "@/components/ui/modal/Modal.vue";
+import Modal from "@/components/common/modal/Modal.vue";
 import upload from "@/components/pages/file-system/ts/upload.ts";
 import {useRoute} from "vue-router";
 import {computed, ref} from "vue";

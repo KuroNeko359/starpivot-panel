@@ -1,5 +1,10 @@
 <script setup lang="ts">
 
+import Modal from "@/components/common/modal/Modal.vue";
+import IconHome from "@/components/icons/IconHome.vue";
+import IconCommunity from "@/components/icons/IconCommunity.vue";
+import IconDocumentation from "@/components/icons/IconDocumentation.vue";
+import IconEcosystem from "@/components/icons/IconEcosystem.vue";
 </script>
 
 <template>
@@ -20,6 +25,9 @@
       </div>
     </label>
   </div>
+  <modal name="upload-file" title="上传文件">
+
+  </modal>
 </template>
 
 <style scoped>

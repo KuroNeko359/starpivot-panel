@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {defineProps, defineEmits} from 'vue';
-import Right from "@/components/icons/pagination-icon/Right.vue";
-import Left from "@/components/icons/pagination-icon/Left.vue";
+import IconRight from "@/components/icons/pagination-icon/IconRight.vue";
+import IconLeft from "@/components/icons/pagination-icon/IconLeft.vue";
 
 const props = defineProps({
   paginationProps: {
@@ -51,7 +51,7 @@ const reduceCurrentPage = () => {
   <div class="join">
     <!-- 使用 v-for 来渲染分页按钮 -->
     <button class="join-item btn p-2" @click="reduceCurrentPage">
-      <left></left>
+      <icon-left></icon-left>
     </button>
     <button
         class="btn"
@@ -65,7 +65,7 @@ const reduceCurrentPage = () => {
       {{ i }}
     </button>
     <button class="join-item btn p-2" @click="addCurrentPage">
-      <right></right>
+      <icon-right></icon-right>
     </button>
   </div>
 </template>

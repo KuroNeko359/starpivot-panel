@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import LanguageIcon from "@/components/icons/language-controller-icon/LanguageIcon.vue";
+import IconLanguage from "@/components/icons/language-controller-icon/IconLanguage.vue";
 import {Language} from "@/i18n";
 import {getLocale, setLocalStorageLanguage} from "@/i18n/language-utils.ts";
 
@@ -23,7 +23,7 @@ const changeLanguage = (language: Language) => {
 <template>
   <div class="dropdown dropdown-bottom dropdown-end p-2">
     <div tabindex="0" role="button">
-      <language-icon></language-icon>
+      <icon-language></icon-language>
     </div>
     <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
       <li>

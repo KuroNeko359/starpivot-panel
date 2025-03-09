@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {onMounted, ref, watch} from "vue";
 import memoryApi from "../../../../api/memory.ts";
-import Shield from "../../../ui/icon/Shield.vue";
+import IconShield from "@/components/icons/IconShield.vue";
 import {SystemMemory, JVMMemory, Memory, MemoryUsageRate} from "./Memory.ts";
 import {getT} from "@/i18n/language-utils.ts";
 
@@ -127,8 +127,8 @@ const getPrompt = () => {
   <div class="flex justify-end">
     <!-- 左侧容器，占总宽度的 5/6 -->
     <div class="flex w-5/6">
-      <!-- 引入 Shield 组件，传递颜色和提示信息 -->
-      <shield :color="circleColor" :prompt="getPrompt()"></shield>
+      <!-- 引入 IconShield 组件，传递颜色和提示信息 -->
+      <icon-shield :color="circleColor" :prompt="getPrompt()"></icon-shield>
     </div>
     <!-- 带有提示信息的容器，鼠标悬停时显示 "打开仪表盘" -->
     <!-- label :for 控制了打开Modal-->

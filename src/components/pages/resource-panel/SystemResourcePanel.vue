@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-import Card from "../common/Card.vue";
-import MemoryCircle from "../common/charts/MemoryRing/MemoryRing.vue";
-import Modal from "../ui/modal/Modal.vue";
-import MemoryPie from "../common/charts/MemoryPie.vue";
+import Card from "../../common/Card.vue";
+import MemoryCircle from "../../common/charts/MemoryRing";
+import Modal from "@/components/common/modal/Modal.vue";
+import MemoryPie from "../../common/charts/MemoryPie.vue";
 import {getLocale, getT} from "@/i18n/language-utils.ts";
 
 let t = getT();

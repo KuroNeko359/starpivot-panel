@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "@/components/pages/Home.vue";
-import SystemResourcePanel from "@/components/pages/SystemResourcePanel.vue";
+import HomePage from "@/components/pages/HomePage.vue";
+import SystemResourcePanel from "@/components/pages/resource-panel/SystemResourcePanel.vue";
 import NodeManagerInformation from "@/components/pages/NodeManagerInformation.vue";
 import FileSystemPage from "@/components/pages/file-system/FileSystemPage.vue";
 
@@ -9,7 +9,7 @@ const router = createRouter({
     routes: [
         {
             path: "/home",
-            component: Home,
+            component: HomePage,
         },
         {
             path: "/resource",

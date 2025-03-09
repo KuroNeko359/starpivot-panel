@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import MaximizationIcon from "@/components/icons/window-controller-icon/MaximizationIcon.vue";
-import ReductionIcon from "@/components/icons/window-controller-icon/ReductionIcon.vue";
+import IconMaximization from "@/components/icons/window-controller-icon/IconMaximization.vue";
+import IconReduction from "@/components/icons/window-controller-icon/IconReduction.vue";
 
 const isFullScreen = ref(true);
 
@@ -45,9 +45,9 @@ const toggleScreenStatus = () => {
     <input type="checkbox" @click="toggleFullScreen" />
 
     <!-- 全屏图标 -->
-    <maximization-icon></maximization-icon>
+    <icon-maximization></icon-maximization>
     <!-- 缩小图标 -->
-    <reduction-icon></reduction-icon>
+    <icon-reduction></icon-reduction>
   </label>
 </template>
 
