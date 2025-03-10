@@ -114,16 +114,41 @@ const timestampToDate = (timestamp: number) => {
   return new Date(timestamp).toLocaleString();
 }
 
-/**
- *
- */
-const addComponent = () => {
-  console.log("添加组件")
-}
 
+
+/**
+ * 控制FileDetail是否渲染
+ * Record<string, boolean> 第一个参数为组件名（文件名），第二个参数为是否选中文件
+ */
 const showDetails = ref<Record<string, boolean>>({});
 
-var t = getT();
+/**
+ * i18n 多语言函数
+ */
+let t = getT();
+
+/**
+ * 处理全选逻辑
+ */
+const handleToggleAll = () => {
+  isCheckedAll.value = !isCheckedAll.value;
+  if (isCheckedAll.value) {
+    checkedFilePath.value = currentFiles.value.map(file => file.path);
+  }else {
+    checkedFilePath.value = [];
+  }
+}
+
+/**
+ * 该变量用于保存是否选全的属性值
+ */
+let isCheckedAll = ref(false);
+
+/**
+ * 该变量用于保存选中的文件列表
+ */
+let checkedFilePath = ref<string[]>([]);
+
 </script>
 
 <template>
@@ -133,20 +158,27 @@ var t = getT();
     <table class="table table-xs">
       <thead>
       <tr>
-        <th></th>
-        <th>{{t('file-table-column.permission')}}</th>
-        <th>{{t('file-table-column.owner')}}</th>
-        <th>{{t('file-table-column.group')}}</th>
-        <th>{{t('file-table-column.size')}}</th>
-        <th>{{t('file-table-column.last-modified')}}</th>
-        <th>{{t('file-table-column.replication')}}</th>
-        <th>{{t('file-table-column.block-size')}}</th>
-        <th>{{t('file-table-column.name')}}</th>
+        <th class="w-12">
+          <input type="checkbox" v-model="isCheckedAll" :checked="isCheckedAll"
+                 class="checkbox"
+                 @click="handleToggleAll"/>
+        </th>
+        <th>{{ t('file-table-column.permission') }}</th>
+        <th>{{ t('file-table-column.owner') }}</th>
+        <th>{{ t('file-table-column.group') }}</th>
+        <th>{{ t('file-table-column.size') }}</th>
+        <th>{{ t('file-table-column.last-modified') }}</th>
+        <th>{{ t('file-table-column.replication') }}</th>
+        <th>{{ t('file-table-column.block-size') }}</th>
+        <th>{{ t('file-table-column.name') }}</th>
       </tr>
       </thead>
       <tbody>
       <tr v-for="(file, index) in currentFiles" :key="file.name">
-        <th class="text-s">{{ index + 1 }}</th>
+        <td>
+          <input type="checkbox" :key="index" class="checkbox"
+                 v-model="checkedFilePath" :value="file.path"/>
+        </td>
         <td class="text-base">{{ file.permission }}</td>
         <td class="text-base">{{ file.owner }}</td>
         <td class="text-base">{{ file.group }}</td>

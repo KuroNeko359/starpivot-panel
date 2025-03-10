@@ -5,6 +5,7 @@ import IconHome from "@/components/icons/IconHome.vue";
 import IconCommunity from "@/components/icons/IconCommunity.vue";
 import IconDocumentation from "@/components/icons/IconDocumentation.vue";
 import IconEcosystem from "@/components/icons/IconEcosystem.vue";
+import HomeView from "@/views/HomeView.vue";
 </script>
 
 <template>
@@ -25,9 +26,6 @@ import IconEcosystem from "@/components/icons/IconEcosystem.vue";
       </div>
     </label>
   </div>
-  <modal name="upload-file" title="上传文件">
-
-  </modal>
 </template>
 
 <style scoped>

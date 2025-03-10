@@ -16,5 +16,9 @@ export default {
         "get-tail": "Tail (last 32K)",
         "size": "Size(bytes)",
         "activity": "Activity",
+    },
+    "upload-file": {
+        "upload-file": "Upload file",
+        "upload": "Upload"
     }
 }

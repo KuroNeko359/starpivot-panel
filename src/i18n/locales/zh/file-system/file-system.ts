@@ -16,5 +16,9 @@ export default {
         "get-tail": "获取文件尾部(32KB)",
         "size": "文件大小(bytes)",
         "activity": "活动节点",
+    },
+    "upload-file": {
+        "upload-file": "文件上传",
+        "upload": "上传"
     }
 }

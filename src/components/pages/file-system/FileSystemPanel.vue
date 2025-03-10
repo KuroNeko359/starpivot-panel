@@ -7,6 +7,7 @@ import UploadButton from "@/components/pages/file-system/button/UploadButton.vue
 import CreateFolderButton from "@/components/pages/file-system/button/CreateFolderButton.vue";
 import FileTable from "@/components/pages/file-system/view/FileTable.vue";
 import type {IFile} from "@/components/pages/file-system/ts/file-system.ts";
+import UploadModal from "@/components/pages/file-system/modal/UploadModal.vue";
 
 let files = ref<IFile[][]>([]); // 修改为一维数组
 
@@ -72,7 +73,8 @@ const updateCurrentPage = (pageNumber: number) => {
     <div class="grid grid-cols-6 gap-4 border-t-1 border-color-gray pt-2">
       <div class="col-span-2">
         <div class="flex justify-start">
-          Showing 1 to 10 of 97 results
+          <!--TODO 未完成文件数显示-->
+          <!--Showing 1 to 10 of 97 results-->
         </div>
       </div>
       <div class="col-span-4 flex justify-end">
@@ -83,6 +85,10 @@ const updateCurrentPage = (pageNumber: number) => {
       </div>
     </div>
   </div>
+
+  <!--Modal框-->
+  <!--  上传文件-->
+  <upload-modal :path="props.path"></upload-modal>
 </template>
 
 <style scoped>
