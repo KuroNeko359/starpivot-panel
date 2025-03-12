@@ -1,4 +1,5 @@
 import apiClient from "./index.ts";
+import api from "./index.ts";
 
 const hadoopFileSystemApi = {
     /**
@@ -18,7 +19,7 @@ const hadoopFileSystemApi = {
      */
     getFiles(path: string) {
         let formData = new FormData();
-        formData.append("path", path)
+        formData.append("path", path);
         return apiClient.post('/hdfs/files', formData);
     },
     /**
@@ -26,25 +27,37 @@ const hadoopFileSystemApi = {
      * @param path HDFS中文件路径
      */
     getFileHead(path: string) {
-        const params = {"path": path}
-        return apiClient.get('/hdfs/file-head', {params})
+        const params = {"path": path};
+        return apiClient.get('/hdfs/file-head', {params});
     },
     /**
      * 获取文件尾
      * @param path HDFS中文件路径
      */
     getFileTail(path: string) {
-        const params = {"path": path}
-        return apiClient.get('/hdfs/file-tail', {params})
+        const params = {"path": path};
+        return apiClient.get('/hdfs/file-tail', {params});
     },
     /**
      * 获取文件内容
      * @param path HDFS中文件路径
      */
     getFileContent(path: string) {
-        const params = {"path": path}
-        return apiClient.get('/hdfs/file-content', {params})
+        const params = {"path": path};
+        return apiClient.get('/hdfs/file-content', {params});
     },
+    /**
+     * 删除文件
+     */
+    deleteFile(path: string) {
+        const params = new FormData();
+        params.append("path", path)
+        return apiClient.post('/hdfs/delete-file', params, {
+            headers: {
+                'Content-Type': 'multipart/form-data',  // 自动由 FormData 处理，但手动设置也可以
+            },
+        });
+    }
 
 }
 

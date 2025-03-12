@@ -157,3 +157,9 @@ body {
     --depth: 1;
     --noise: 0;
 }
+
+
+.border-color-gray {
+    border-color: var(--input-color);
+    --input-color: color-mix(in oklab, var(--color-base-content) 20%, #0000);
+}

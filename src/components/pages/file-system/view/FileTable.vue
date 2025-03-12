@@ -22,6 +22,10 @@ import router from "../../../../router";
 import FileDetail from "./FileDetail.vue";
 import Alert from "../../../common/alert/Alert.vue";
 import {getT} from "@/i18n/language-utils.ts";
+import {useFileSystemStore} from "@/stores/file-system.ts";
+
+
+let emit = defineEmits(["delete-files"]);
 
 interface PaginationProps {
   pageNumber: number;
@@ -115,7 +119,6 @@ const timestampToDate = (timestamp: number) => {
 }
 
 
-
 /**
  * 控制FileDetail是否渲染
  * Record<string, boolean> 第一个参数为组件名（文件名），第二个参数为是否选中文件
@@ -133,9 +136,9 @@ let t = getT();
 const handleToggleAll = () => {
   isCheckedAll.value = !isCheckedAll.value;
   if (isCheckedAll.value) {
-    checkedFilePath.value = currentFiles.value.map(file => file.path);
-  }else {
-    checkedFilePath.value = [];
+    checkedFilePathList.value = currentFiles.value.map(file => file.path);
+  } else {
+    checkedFilePathList.value = [];
   }
 }
 
@@ -147,8 +150,29 @@ let isCheckedAll = ref(false);
 /**
  * 该变量用于保存选中的文件列表
  */
-let checkedFilePath = ref<string[]>([]);
+let checkedFilePathList = ref<string[]>([]);
 
+/**
+ * 获取FileSystemStore
+ */
+let fileSystemStore = useFileSystemStore();
+
+/**
+ * 更新store中的checkedFilesPath
+ * @param checkedFilePathList 当前选中的文件path列表
+ */
+const saveCheckedPathsToStore  = (checkedFilePathList: string[]) => {
+  fileSystemStore.checkedFilePathList = checkedFilePathList;
+}
+
+/**
+ * 监听checkedFilePath的更改
+ * 如果更改，更新store中的updateCheckedFilesToStore
+ */
+watch(checkedFilePathList,(newFilePathList) => {
+  //更新updateCheckedFilePathListToStore到store
+  saveCheckedPathsToStore(newFilePathList);
+})
 </script>
 
 <template>
@@ -177,7 +201,7 @@ let checkedFilePath = ref<string[]>([]);
       <tr v-for="(file, index) in currentFiles" :key="file.name">
         <td>
           <input type="checkbox" :key="index" class="checkbox"
-                 v-model="checkedFilePath" :value="file.path"/>
+                 v-model="checkedFilePathList" :value="file.path"/>
         </td>
         <td class="text-base">{{ file.permission }}</td>
         <td class="text-base">{{ file.owner }}</td>
