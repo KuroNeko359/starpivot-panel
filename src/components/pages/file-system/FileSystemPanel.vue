@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import hadoopFileSystemApi from "@/api/hadoop-file-system.ts";
-import {onMounted, ref, watch} from "vue";
+import {nextTick, onMounted, onUpdated, ref, watch} from "vue";
 import Breadcurmbs from "@/components/navigation/breadcurmbs/Breadcurmbs.vue";
 import FileSystemPagination from "@/components/pages/file-system/FileSystemPagination.vue";
 import UploadButton from "@/components/pages/file-system/button/UploadButton.vue";
 import CreateFolderButton from "@/components/pages/file-system/button/CreateFolderButton.vue";
-import FileTable from "@/components/pages/file-system/view/FileTable.vue";
+import FileTable from "@/components/pages/file-system/view/table/FileTable.vue";
 import type {IFile} from "@/components/pages/file-system/ts/file-system.ts";
 import UploadModal from "@/components/pages/file-system/modal/UploadModal.vue";
 import DeleteButton from "@/components/pages/file-system/button/DeleteButton.vue";
@@ -13,6 +13,8 @@ import ConfirmModal from "@/components/common/modal/ConfirmModal.vue";
 import {useFileSystemStore} from "@/stores/file-system.ts";
 import Modal from "@/components/common/modal/Modal.vue";
 import Alert from "@/components/common/alert/Alert.vue";
+import type {AxiosResponse} from "axios";
+import router from "@/router";
 
 let files = ref<IFile[][]>([]); // 修改为一维数组
 let fileSystemStore = useFileSystemStore();
@@ -30,9 +32,11 @@ let props = defineProps({
     required: false,
     default: "/",
   },
+  refreshFunction: {
+    type: Function,
+    required: true
+  }
 });
-
-
 
 
 onMounted(async () => {
@@ -41,6 +45,10 @@ onMounted(async () => {
   paginationProps.value.pageNumber = files.value.length;
   console.log(files.value);
 });
+
+onUpdated( () => {
+  console.log("update");
+})
 
 /**
  * 按 numberPerPage 拆分数组 为一个二维数组
@@ -79,19 +87,27 @@ const confirmDelete = async () => {
   for (const file of checkedFilePathList.value) {
     let axiosResponse = await hadoopFileSystemApi.deleteFile(file);
     if (axiosResponse.status == 200) {
-      alert("Deleting successfully!");
+
     }
   }
 }
 
 
+/**
+ * 只要调用这个方法就可以调用Page传来的回调函数
+ * 从而刷新FileSystemPage，也就是此页面
+ */
+const refresh = () => {
+  props.refreshFunction();
+}
+
 
 </script>
 
-<template>
+<template v-if="refreshKey">
   <div>
 
-    <alert content="警告" mode=""></alert>
+<!--    <alert :is-show="isAlertShow" :content="alertContent" :mode="alertMode"></alert>-->
     <!-- 面包屑导航 -->
     <div class="w-full max-w-full grid grid-cols-6 gap-4">
       <div class="pr-2 border-color-gray rounded-sm border-1 border-base-content col-span-5 px-2">
@@ -135,11 +151,11 @@ const confirmDelete = async () => {
 
   <!--Modal框-->
   <!--  上传文件-->
-  <upload-modal :path="props.path"></upload-modal>
+  <upload-modal :path="props.path" :refresh-page-function="refresh"></upload-modal>
   <!--  删除文件的确认框-->
   <confirm-modal v-if="checkedFilePathList.length > 0" id="delete" title="Delete files"
                  content="Are you sure you want to delete there files?"
-                 :callback="confirmDelete"></confirm-modal>
+                 :callback="confirmDelete" :refresh-page-function="refresh"></confirm-modal>
 
 
 </template>

@@ -13,10 +13,6 @@ let props = defineProps({
 </script>
 
 <template>
-  <!-- The button to open modal -->
-
-
-  <!-- Put this part before </body> tag -->
   <input type="checkbox" :id="props.name" class="modal-toggle"/>
   <div class="modal" role="dialog">
     <div class="modal-box">

@@ -11,6 +11,10 @@ const props = defineProps({
   path: {
     type: String,
     required: true,
+  },
+  refreshPageFunction: {
+    type: Function,
+    required: true,
   }
 })
 
@@ -49,6 +53,8 @@ const uploadFile = async () => {
     if (fileInput.value) {
       fileInput.value.value = '';
     }
+    //重置后 调用refresh刷新Page
+    props.refreshPageFunction();
   } catch (error) {
     console.error('Upload failed:', error);
   }
@@ -64,12 +70,14 @@ const uploadFile = async () => {
           class="file-input"
           @change="handleFileChange"
       />
-      <div
+      <label
           class="btn btn-primary"
+          for="upload-file"
           @click="uploadFile"
       >
         {{ t('upload-file.upload') }}
-      </div>
+      </label>
+
     </div>
   </modal>
 </template>

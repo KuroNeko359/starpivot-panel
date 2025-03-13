@@ -24,6 +24,10 @@ let props = defineProps({
   callback: {
     type: Function,
     required: true
+  },
+  refreshPageFunction: {
+    type: Function,
+    required: true
   }
 });
 
@@ -33,6 +37,7 @@ let props = defineProps({
  */
 const handleConfirm = () => {
   props.callback()
+  props.refreshPageFunction()
 }
 </script>
 
