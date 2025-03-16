@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import IconUpload from "@/components/icons/IconUpload.vue";
+
 </script>
 
 <template>

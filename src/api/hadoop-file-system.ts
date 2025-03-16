@@ -52,6 +52,7 @@ const hadoopFileSystemApi = {
     deleteFile(path: string) {
         const params = new FormData();
         params.append("path", path)
+        console.log(params)
         return apiClient.post('/hdfs/delete-file', params, {
             headers: {
                 'Content-Type': 'multipart/form-data',  // 自动由 FormData 处理，但手动设置也可以

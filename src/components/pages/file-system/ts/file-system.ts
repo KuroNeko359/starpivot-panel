@@ -1,18 +1,57 @@
-export interface IFile {
+interface Path {
+    root: boolean;
+    uriPathAbsolute: boolean;
+    absoluteAndSchemeAuthorityNull: boolean;
     name: string;
-    path: string;
-    url: string;
+    parent: Path | null;
+    absolute: boolean;
+}
+
+interface Permission {
+    stickyBit: boolean;
+    aclBit: boolean;
+    encryptedBit: boolean;
+    erasureCodedBit: boolean;
+    userAction: string;
+    groupAction: string;
+    otherAction: string;
+    masked: null;
+    unmasked: null;
+}
+
+interface BlockLocation {
+    hosts: string[];
+    cachedHosts: string[];
+    names: string[];
+    topologyPaths: string[];
+    storageIds: string[];
+    storageTypes: string[];
+    offset: number;
     length: number;
-    dir: boolean;
-    blockReplication: number;
-    blockSize: number;
-    modificationTime: number;
-    accessTime: number;
-    permission: string;
+    corrupt: boolean;
+}
+
+export interface FileInfo {
+    path: Path;
+    permission: Permission;
     owner: string;
     group: string;
-    symlink: string; // TODO 后端是Path类型 还未实现
-    locations: any[];
+    symlink: Path;
+    permissionString: string;
+    name: string;
+    pathInHdfs: string;
+    blockLocations: BlockLocation[];
+    len: number;
+    replication: number;
+    blockSize: number;
+    encrypted: boolean;
+    erasureCoded: boolean;
+    dir: boolean;
+    snapshotEnabled: boolean;
+    modificationTime: number;
+    accessTime: number;
+    directory: boolean;
+    file: boolean;
 }
 
 export interface IFileContent {

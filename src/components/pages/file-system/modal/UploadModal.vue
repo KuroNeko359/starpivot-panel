@@ -1,64 +1,72 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import Modal from "@/components/common/modal/Modal.vue";
-import { getT } from "@/i18n/language-utils.ts";
-import hadoopFileSystemApi from "@/api/hadoop-file-system.ts";
+import {ref} from 'vue'
+import Modal from '@/components/common/modal/Modal.vue'
+import {getT} from '@/i18n/language-utils.ts'
+import hadoopFileSystemApi from '@/api/hadoop-file-system.ts'
+import {useFileSystemStore} from "@/stores/file-system.ts";
+import type {AxiosResponse} from "axios";
 
-const t = getT();
+// 类型定义
+interface Props {
+  path: string
+  refreshPageFunction: () => void
+}
 
-// 定义 props
-const props = defineProps({
-  path: {
-    type: String,
-    required: true,
-  },
-  refreshPageFunction: {
-    type: Function,
-    required: true,
-  }
-})
+// Props 定义
+const props = defineProps<Props>()
 
-// 文件输入引用和选中的文件
-const fileInput = ref<HTMLInputElement | null>(null);
-const selectedFile = ref<File | null>(null);
+// 状态
+const fileInput = ref<HTMLInputElement | null>(null)
+const selectedFile = ref<File | null>(null)
+const isUploading = ref(false)
+let fileSystemStore = useFileSystemStore();
+const t = getT()
 
-// 处理文件选择
+// 文件选择处理
 const handleFileChange = (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  if (target.files && target.files.length > 0) {
-    selectedFile.value = target.files[0];
-  }
-};
+  const target = event.target as HTMLInputElement
+  selectedFile.value = target.files?.[0] ?? null
+}
 
-// 上传文件
+// 文件上传
 const uploadFile = async () => {
   if (!selectedFile.value) {
-    console.error('No file selected');
-    return;
+    console.error('No file selected')
+    return
   }
 
+  if (isUploading.value) return
+
+  isUploading.value = true
   try {
-    // 创建 FormData 对象
-    const formData = new FormData();
-    formData.append('file', selectedFile.value);
-    formData.append('path', props.path);
+    const formData = new FormData()
+    formData.append('file', selectedFile.value)
+    formData.append('path', props.path)
 
-    // 调用 API 上传文件
-    console.log(formData.get("file"));
-    const response = await hadoopFileSystemApi.uploadFile(formData);
-    console.log('Upload successful:', response);
-
-    // 上传成功后重置
-    selectedFile.value = null;
-    if (fileInput.value) {
-      fileInput.value.value = '';
-    }
-    //重置后 调用refresh刷新Page
-    props.refreshPageFunction();
+    const response = await hadoopFileSystemApi.uploadFile(formData)
+    console.log('Upload successful:', response)
+    //更新store
+    fileSystemStore.updateStore(response)
+    // 重置状态
+    resetForm()
+    props.refreshPageFunction()
   } catch (error) {
-    console.error('Upload failed:', error);
+    console.error('Upload failed:', error)
+    throw error // 让调用者可以处理错误
+  } finally {
+    isUploading.value = false
   }
-};
+}
+
+
+
+// 重置表单
+const resetForm = () => {
+  selectedFile.value = null
+  if (fileInput.value) {
+    fileInput.value.value = ''
+  }
+}
 </script>
 
 <template>
@@ -68,20 +76,34 @@ const uploadFile = async () => {
           ref="fileInput"
           type="file"
           class="file-input"
+          :disabled="isUploading"
           @change="handleFileChange"
       />
-      <label
+      <button
           class="btn btn-primary"
-          for="upload-file"
+          :disabled="!selectedFile || isUploading"
           @click="uploadFile"
       >
         {{ t('upload-file.upload') }}
-      </label>
-
+      </button>
     </div>
   </modal>
 </template>
 
 <style scoped>
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
 
+.file-input {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 </style>

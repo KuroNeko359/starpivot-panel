@@ -4,20 +4,21 @@
 *
 * @component
 * @example
-* <FileTable :files="files" :pagination-props="paginationProps" />
+*
+<FileTable :files="files" :pagination-props="paginationProps"/>
 *
 * @prop {IFile[][]} files - 分页文件列表的多维数组
 * @prop {PaginationProps} pagination-props - 分页配置对象
 */
 
 <script setup lang="ts">
-import { defineProps, ref, watch, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import type { IFile } from '@/components/pages/file-system/ts/file-system.ts'
+import {defineProps, ref, watch, computed, onMounted} from 'vue'
+import {useRouter} from 'vue-router'
+import type {FileInfo} from '@/components/pages/file-system/ts/file-system.ts'
 import FileDetail from '@/components/pages/file-system/view/FileDetail.vue'
 import Alert from '@/components/common/alert/Alert.vue'
-import { getT } from '@/i18n/language-utils.ts'
-import { useFileSystemStore } from '@/stores/file-system.ts'
+import {getT} from '@/i18n/language-utils.ts'
+import {useFileSystemStore} from '@/stores/file-system.ts'
 
 interface PaginationProps {
   pageNumber: number    // 总页数
@@ -28,7 +29,7 @@ interface PaginationProps {
 defineEmits(['delete-files'])
 
 const props = defineProps<{
-  files: IFile[][]
+  files: FileInfo[][]
   paginationProps: PaginationProps
 }>()
 
@@ -41,7 +42,6 @@ const currentPage = ref(props.paginationProps.currentPage)
 const isCheckedAll = ref(false)
 const checkedFilePathList = ref<string[]>([])
 const showDetails = ref<Record<string, boolean>>({})
-const alertIsShow = ref(false)
 
 // 计算属性：当前页文件列表
 const currentFiles = computed(() =>
@@ -53,28 +53,33 @@ watch(() => props.paginationProps.currentPage, (newPage) => {
   currentPage.value = newPage
 })
 
+//监听checkedFilePathList的变化，如果发生变化则更新到Store中
 watch(checkedFilePathList, (newPaths) => {
   fileSystemStore.checkedFilePathList = newPaths
 })
 
 // 文件操作函数
-const handleFileClick = (file: IFile) => {
+const handleFileClick = (file: FileInfo) => {
   if (file.dir) {
     router.push({
       path: '/explore',
-      query: { path: encodeURIComponent(file.path) }
+      query: {path: encodeURIComponent(file.pathInHdfs)}
     })
   } else {
     showDetails.value[file.name] = true
   }
 }
 
-const toggleAllCheckboxes = () => {
-  isCheckedAll.value = !isCheckedAll.value
+// 选中所有文件
+const toggleAllCheckboxes = (event: Event) => {
+  //切换isCheckedAll的状态
+  isCheckedAll.value = (event.target as HTMLInputElement).checked
+  //如果isCheckedAll为true，把当前列表的所有内容更新到checkedFilePathList
   checkedFilePathList.value = isCheckedAll.value
-      ? currentFiles.value.map(file => file.path)
+      ? currentFiles.value.map(file => file.pathInHdfs)
       : []
 }
+
 
 // 工具函数
 const formatDate = (timestamp: number): string =>
@@ -83,20 +88,17 @@ const formatDate = (timestamp: number): string =>
 const formatBlockSize = (bytes: number): string =>
     `${(bytes / 1024 / 1024).toFixed(2)} MB`
 
-const showAlert = () => {
-  alertIsShow.value = true
-}
+
+// 挂载FileTable的逻辑
+onMounted(() => {
+  // 清除提示标语
+  fileSystemStore.resetStore();
+})
 </script>
 
 <template>
   <div class="overflow-x-auto">
-    <button class="btn" @click="showAlert">Show Alert</button>
 
-    <Alert
-        :is-show="alertIsShow"
-        content="Upload successful"
-        mode="alert-success"
-    />
 
     <Alert
         :is-show="currentFiles.length === 0"
@@ -107,6 +109,7 @@ const showAlert = () => {
       <thead>
       <tr>
         <th class="w-12">
+          <!--全选框-->
           <input
               type="checkbox"
               v-model="isCheckedAll"
@@ -125,29 +128,29 @@ const showAlert = () => {
       </tr>
       </thead>
       <tbody>
-      <tr v-for="file in currentFiles" :key="file.path">
+      <tr v-for="file in currentFiles" :key="file.pathInHdfs">
         <td>
           <input
               type="checkbox"
               class="checkbox"
               v-model="checkedFilePathList"
-              :value="file.path"
+              :value="file.pathInHdfs"
           />
         </td>
-        <td class="text-base">{{ file.permission }}</td>
+        <td class="text-base">{{ file.permissionString }}</td>
         <td class="text-base">{{ file.owner }}</td>
         <td class="text-base">{{ file.group }}</td>
-        <td class="text-base">{{ file.length }} B</td>
+        <td class="text-base">{{ file.len }} B</td>
         <td class="text-base">{{ formatDate(file.modificationTime) }}</td>
-        <td class="text-base">{{ file.blockReplication }}</td>
+        <td class="text-base">{{ file.replication }}</td>
         <td class="text-base">{{ formatBlockSize(file.blockSize) }}</td>
         <td class="text-base">
           <component
-              :is="file.dir ? 'router-link' : 'label'"
-              :to="file.dir ? { path: '/explore', query: { path: encodeURIComponent(file.path) } } : undefined"
-              :for="!file.dir ? file.path : undefined"
+              :is="file.directory ? 'router-link' : 'label'"
+              :to="file.directory ? { path: '/explore', query: { path: encodeURIComponent(file.pathInHdfs) } } : undefined"
+              :for="!file.directory ? file.pathInHdfs : undefined"
               class="link link-primary"
-              @click="!file.dir && handleFileClick(file)"
+              @click="!file.directory && handleFileClick(file)"
           >
             {{ file.name }}
           </component>

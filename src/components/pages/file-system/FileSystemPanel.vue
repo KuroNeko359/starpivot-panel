@@ -1,165 +1,170 @@
 <script setup lang="ts">
-import hadoopFileSystemApi from "@/api/hadoop-file-system.ts";
-import {nextTick, onMounted, onUpdated, ref, watch} from "vue";
+import { nextTick, onMounted, ref, watch } from "vue";
+import type { AxiosResponse } from "axios";
+import hadoopFileSystemApi from "@/api/hadoop-file-system";
+import { useFileSystemStore } from "@/stores/file-system";
+import type { FileInfo } from "@/components/pages/file-system/ts/file-system";
 import Breadcurmbs from "@/components/navigation/breadcurmbs/Breadcurmbs.vue";
 import FileSystemPagination from "@/components/pages/file-system/FileSystemPagination.vue";
 import UploadButton from "@/components/pages/file-system/button/UploadButton.vue";
 import CreateFolderButton from "@/components/pages/file-system/button/CreateFolderButton.vue";
-import FileTable from "@/components/pages/file-system/view/table/FileTable.vue";
-import type {IFile} from "@/components/pages/file-system/ts/file-system.ts";
-import UploadModal from "@/components/pages/file-system/modal/UploadModal.vue";
 import DeleteButton from "@/components/pages/file-system/button/DeleteButton.vue";
+import FileTable from "@/components/pages/file-system/view/table/FileTable.vue";
+import UploadModal from "@/components/pages/file-system/modal/UploadModal.vue";
 import ConfirmModal from "@/components/common/modal/ConfirmModal.vue";
-import {useFileSystemStore} from "@/stores/file-system.ts";
-import Modal from "@/components/common/modal/Modal.vue";
 import Alert from "@/components/common/alert/Alert.vue";
-import type {AxiosResponse} from "axios";
-import router from "@/router";
 
-let files = ref<IFile[][]>([]); // 修改为一维数组
-let fileSystemStore = useFileSystemStore();
-let checkedFilePathList = ref(fileSystemStore.checkedFilePathList ?? []);
+// 定义 props 类型
+const props = defineProps<{
+  path?: string;
+  refreshFunction: () => void;
+}>();
 
-let paginationProps = ref({
+// 默认值处理
+const currentPath = props.path ?? "/";
+
+// 响应式状态
+const files = ref<FileInfo[][]>([]);
+const fileSystemStore = useFileSystemStore();
+const checkedFilePathList = ref<string[]>(fileSystemStore.checkedFilePathList ?? []);
+const paginationProps = ref({
   pageNumber: 0,
   numberPerPage: 20,
   currentPage: 1,
 });
 
-let props = defineProps({
-  path: {
-    type: String,
-    required: false,
-    default: "/",
-  },
-  refreshFunction: {
-    type: Function,
-    required: true
-  }
-});
-
-
-onMounted(async () => {
-  // 初次获取文件数据
-  files.value = splitArray((await hadoopFileSystemApi.getFiles(props.path)).data);
-  paginationProps.value.pageNumber = files.value.length;
-  console.log(files.value);
-});
-
-onUpdated( () => {
-  console.log("update");
-})
-
-/**
- * 按 numberPerPage 拆分数组 为一个二维数组
- * @param array 将要拆成二维数组的一维数组
- */
-function splitArray(array: any[]): any[][] {
-  let newArray: any[][] = [];
-  let numberPerPage = paginationProps.value.numberPerPage;
+// 工具函数：按分页大小拆分数组
+const splitArray = (array: FileInfo[]): FileInfo[][] => {
+  const { numberPerPage } = paginationProps.value;
+  const result: FileInfo[][] = [];
   for (let i = 0; i < array.length; i += numberPerPage) {
-    newArray.push(array.slice(i, i + numberPerPage));
+    result.push(array.slice(i, i + numberPerPage));
   }
-  return newArray;
-}
+  return result;
+};
 
-/**
- * 更新当前页
- * @param pageNumber 新的页码
- */
+// 获取文件数据
+const fetchFiles = async () => {
+  try {
+    const response = await hadoopFileSystemApi.getFiles(currentPath);
+    files.value = splitArray(response.data);
+    paginationProps.value.pageNumber = files.value.length;
+  } catch (error) {
+    console.error("Failed to fetch files:", error);
+    // 可添加错误处理逻辑，例如显示错误提示
+  }
+};
+
+// 初始化加载
+onMounted(fetchFiles);
+
+// 更新当前页码
 const updateCurrentPage = (pageNumber: number) => {
   paginationProps.value.currentPage = pageNumber;
-}
+};
 
-
-/**
- * 监控fileSystemStore.checkedFilePathList的变化
- * 如果变化 那么更新checkedFilePathList的属性
- */
-watch(() => fileSystemStore.checkedFilePathList, (newVal) => {
-  checkedFilePathList.value = newVal ?? [];
-});
-
-/**
- * 从服务器删除文件
- */
-const confirmDelete = async () => {
-  for (const file of checkedFilePathList.value) {
-    let axiosResponse = await hadoopFileSystemApi.deleteFile(file);
-    if (axiosResponse.status == 200) {
-
+// 监听 checkedFilePathList 变化
+watch(
+    () => fileSystemStore.checkedFilePathList,
+    (newVal) => {
+      checkedFilePathList.value = newVal ?? [];
     }
+);
+
+// 删除文件
+const confirmDelete = async () => {
+  const deletePromises = checkedFilePathList.value.map((file) =>
+      hadoopFileSystemApi.deleteFile(file)
+  );
+
+  try {
+    const response = await Promise.all(deletePromises);
+
+    response.forEach((res) => {
+      if (res.status !== 200) {
+        console.warn(`Failed to delete a file, status: ${res.status}`);
+      }
+      fileSystemStore.updateStore(res);
+    });
+    await fetchFiles();
+
+  } catch (error) {
+    console.error("Delete operation failed:", error);
   }
+};
+
+// 刷新页面
+const refreshTable = () => {
+  // props.refreshFunction();
+  fetchFiles();
+};
+
+const isRequestSuccess =() => {
+  console.log(fileSystemStore.response)
 }
 
-
-/**
- * 只要调用这个方法就可以调用Page传来的回调函数
- * 从而刷新FileSystemPage，也就是此页面
- */
-const refresh = () => {
-  props.refreshFunction();
-}
+// const showAlert = () => {
+//   fileSystemStore.isAlertShow = true;
+// }
 
 
 </script>
 
-<template v-if="refreshKey">
-  <div>
+<template>
 
-<!--    <alert :is-show="isAlertShow" :content="alertContent" :mode="alertMode"></alert>-->
-    <!-- 面包屑导航 -->
-    <div class="w-full max-w-full grid grid-cols-6 gap-4">
-      <div class="pr-2 border-color-gray rounded-sm border-1 border-base-content col-span-5 px-2">
-        <breadcurmbs :path="props.path"></breadcurmbs>
+  <Alert
+      :is-show="fileSystemStore.isAlertShow"
+      :content="fileSystemStore.alertContent"
+      :mode="fileSystemStore.alertMode"
+  />
+  <div>
+    <!-- 面包屑导航和操作按钮 -->
+    <div class="grid w-full max-w-full grid-cols-6 gap-4">
+      <div class="col-span-5 rounded-sm border border-base-content px-2 pr-2">
+        <Breadcurmbs :path="currentPath" />
       </div>
-      <div class="basis-1/6 col-span-1">
+      <div class="col-span-1">
         <div class="flex justify-end join">
-          <!--上传按钮-->
-          <upload-button class="join-item"></upload-button>
-          <!--创建文件夹按钮-->
-          <create-folder-button class="join-item"></create-folder-button>
-          <!--删除文件-->
-          <delete-button class="join-item" for="delete"></delete-button>
+          <UploadButton class="join-item" />
+          <CreateFolderButton class="join-item" />
+          <DeleteButton class="join-item" for="delete" />
         </div>
       </div>
     </div>
 
-    <!-- 表格 -->
+    <!-- 文件表格 -->
     <div>
-      <file-table
-          :paginationProps="paginationProps"
-          :files="files"/>
+      <FileTable :pagination-props="paginationProps" :files="files" />
     </div>
 
     <!-- 分页组件 -->
-    <div class="grid grid-cols-6 gap-4 border-t-1 border-color-gray pt-2">
+    <div class="grid grid-cols-6 gap-4 border-t border-gray-300 pt-2">
       <div class="col-span-2">
         <div class="flex justify-start">
-          <!--TODO 未完成文件数显示-->
-          <!--Showing 1 to 10 of 97 results-->
+          <!-- TODO: 显示文件总数 -->
         </div>
       </div>
       <div class="col-span-4 flex justify-end">
-        <file-system-pagination
-            @update:current-page="updateCurrentPage"
+        <FileSystemPagination
             v-model="paginationProps.currentPage"
-            :pagination-props="paginationProps"/>
+            :pagination-props="paginationProps"
+            @update:current-page="updateCurrentPage"
+        />
       </div>
     </div>
+
+    <!-- Modal -->
+    <UploadModal :path="currentPath" :refresh-page-function="refreshTable" />
+    <ConfirmModal
+        v-if="checkedFilePathList.length > 0"
+        id="delete"
+        title="Delete files"
+        content="Are you sure you want to delete these files?"
+        :callback="confirmDelete"
+        :refresh-page-function="refreshTable"
+    />
   </div>
-
-  <!--Modal框-->
-  <!--  上传文件-->
-  <upload-modal :path="props.path" :refresh-page-function="refresh"></upload-modal>
-  <!--  删除文件的确认框-->
-  <confirm-modal v-if="checkedFilePathList.length > 0" id="delete" title="Delete files"
-                 content="Are you sure you want to delete there files?"
-                 :callback="confirmDelete" :refresh-page-function="refresh"></confirm-modal>
-
-
 </template>
 
 <style scoped>
-
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type {IFile, IFileContent} from "../ts/file-system.ts";
+import type {FileInfo, IFileContent} from "../ts/file-system.ts";
 import {defineProps, ref, watch} from "vue";
 import {config} from "../../../../../public/config.ts";
 import {getT} from "@/i18n/language-utils.ts";
@@ -10,7 +10,7 @@ import hadoopFileSystemApi from "@/api/hadoop-file-system.ts";
  * file IFile 接口 包含了文件的信息
  */
 const props = defineProps<{
-  file: IFile;
+  file: FileInfo;
 }>();
 
 /**
@@ -78,7 +78,7 @@ const changeContent = (input: string) => {
  * 处理获取文件头按钮被点击的事件
  */
 const handleHeadClick = async () => {
-  let fileHead = await getFileHead(props.file.path);
+  let fileHead = await getFileHead(props.file.pathInHdfs);
   changeContent(fileHead);
 }
 
@@ -86,7 +86,7 @@ const handleHeadClick = async () => {
  * 处理获取文件尾按钮被点击的事件
  */
 const handleGetContentClick = async (mode: FileContentMode) => {
-  let fileTail = await getFileContent(props.file.path, mode);
+  let fileTail = await getFileContent(props.file.pathInHdfs, mode);
   changeContent(fileTail);
 }
 
@@ -95,12 +95,12 @@ console.log(props.file)
 </script>
 
 <template>
-  <input type="checkbox" :id="props.file.path" class="modal-toggle"/>
+  <input type="checkbox" :id="props.file.pathInHdfs" class="modal-toggle"/>
 
   <div class="modal" role="dialog">
 
     <div class="modal-box">
-      <label :for="props.file.path" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
+      <label :for="props.file.pathInHdfs" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</label>
       <div class="border-b-[1px] border-base-300 h-auto pb-4">
         <h3 class="text-2xl">{{ props.file.name }}</h3>
       </div>
@@ -109,7 +109,7 @@ console.log(props.file)
         <div class="flex flex-row">
           <div class="flex-1/3">
             <a class="btn-ghost text-sm"
-               :href="`${config.starpivot.baseURL}hdfs/download-file?path=${file.path}`"
+               :href="`${config.starpivot.baseURL}hdfs/download-file?path=${file.pathInHdfs}`"
                download
             >{{ t('file-detail.download') }}</a>
           </div>
@@ -127,9 +127,9 @@ console.log(props.file)
       </div>
       <!--Activity-->
       <div class="border-b-[1px] border-base-300 py-2">
-        <div>{{t('file-detail.size')}}: {{file.locations[0].length}}</div>
-        <p class="text-base">{{t('file-detail.activity')}}:</p>
-        <div v-for="host in file.locations[0].hosts" class="flex flex-row pl-4">
+        <div>{{ t('file-detail.size') }}: {{ file.blockLocations[0].length }}</div>
+        <p class="text-base">{{ t('file-detail.activity') }}:</p>
+        <div v-for="host in file.blockLocations[0].hosts" class="flex flex-row pl-4">
           <div aria-label="success" class="m-1 status-md status status-success"></div>
           <p class="text-sm">
             {{ host }}
