@@ -14,7 +14,7 @@ let filePathList = pathStringToList(props.path);
 </script>
 
 <template>
-  <div class="breadcrumbs text-sm" >
+  <div class="breadcrumbs text-sm " >
     <ul class="">
       <!--      &lt;!&ndash;      根目录&ndash;&gt;-->
       <breadcurmbs-node

@@ -1,6 +1,11 @@
 import apiClient from "./index.ts";
 import api from "./index.ts";
 
+// 在上传文件时 200-599 都视为成功
+const validateStatus = (status: number) => {
+    return status >= 200 && status < 600;
+}
+
 const hadoopFileSystemApi = {
     /**
      * 上传文件
@@ -11,6 +16,7 @@ const hadoopFileSystemApi = {
             headers: {
                 'Content-Type': 'multipart/form-data',  // 自动由 FormData 处理，但手动设置也可以
             },
+            validateStatus
         });
     },
     /**
@@ -57,6 +63,7 @@ const hadoopFileSystemApi = {
             headers: {
                 'Content-Type': 'multipart/form-data',  // 自动由 FormData 处理，但手动设置也可以
             },
+            validateStatus
         });
     }
 

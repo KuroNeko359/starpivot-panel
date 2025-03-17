@@ -120,7 +120,7 @@ const isRequestSuccess =() => {
   <div>
     <!-- 面包屑导航和操作按钮 -->
     <div class="grid w-full max-w-full grid-cols-6 gap-4">
-      <div class="col-span-5 rounded-sm border border-base-content px-2 pr-2">
+      <div class="col-span-5 rounded-sm border border-color-gray px-2 pr-2">
         <Breadcurmbs :path="currentPath" />
       </div>
       <div class="col-span-1">
@@ -138,7 +138,7 @@ const isRequestSuccess =() => {
     </div>
 
     <!-- 分页组件 -->
-    <div class="grid grid-cols-6 gap-4 border-t border-gray-300 pt-2">
+    <div class="grid grid-cols-6 gap-4 border-t border-color-gray pt-2">
       <div class="col-span-2">
         <div class="flex justify-start">
           <!-- TODO: 显示文件总数 -->
