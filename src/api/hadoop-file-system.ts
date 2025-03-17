@@ -55,6 +55,7 @@ const hadoopFileSystemApi = {
     /**
      * 删除文件
      */
+    //TODO 暂时没有删除文件夹的接口
     deleteFile(path: string) {
         const params = new FormData();
         params.append("path", path)
