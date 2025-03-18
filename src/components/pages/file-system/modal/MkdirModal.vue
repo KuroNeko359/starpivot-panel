@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import {ref, watch} from 'vue'
 import Modal from '@/components/common/modal/Modal.vue'
 import {getT} from '@/i18n/language-utils.ts'
 import hadoopFileSystemApi from '@/api/hadoop-file-system.ts'
 import {useFileSystemStore} from "@/stores/file-system.ts";
-import type {AxiosResponse} from "axios";
 
 // 类型定义
 interface Props {
@@ -16,22 +15,16 @@ interface Props {
 const props = defineProps<Props>()
 
 // 状态
-const fileInput = ref<HTMLInputElement | null>(null)
-const selectedFile = ref<File | null>(null)
+const directoryName = ref<string>('');
 const isUploading = ref(false)
 let fileSystemStore = useFileSystemStore();
 const t = getT()
 
-// 文件选择处理
-const handleFileChange = (event: Event) => {
-  const target = event.target as HTMLInputElement
-  selectedFile.value = target.files?.[0] ?? null
-}
 
-// 文件上传
-const uploadFile = async () => {
-  if (!selectedFile.value) {
-    console.error('No file selected')
+// 创建文件夹
+const createDirectory = async () => {
+  if (directoryName.value === '') {
+    console.error('Directory name is missing.')
     return
   }
 
@@ -39,15 +32,10 @@ const uploadFile = async () => {
 
   isUploading.value = true
   try {
-    const formData = new FormData()
-    formData.append('file', selectedFile.value)
-    formData.append('path', props.path)
-
-    const response = await hadoopFileSystemApi.uploadFile(formData)
+    const response = await hadoopFileSystemApi.mkdir(props.path, directoryName.value)
     //更新store
     fileSystemStore.updateStore(response)
     // 重置状态
-    resetForm()
     props.refreshPageFunction()
   } catch (error) {
     console.error('Upload failed:', error)
@@ -57,33 +45,26 @@ const uploadFile = async () => {
   }
 }
 
-
-
-// 重置表单
-const resetForm = () => {
-  selectedFile.value = null
-  if (fileInput.value) {
-    fileInput.value.value = ''
-  }
-}
+watch(directoryName, () => {
+  console.log(directoryName.value)
+})
 </script>
 
 <template>
-  <modal name="upload-file" :title="t('upload-file.upload-file')">
+  <modal name="mkdir" :title="t('mkdir.create-directory')">
     <div class="upload-container">
-      <input
-          ref="fileInput"
-          type="file"
-          class="file-input"
-          :disabled="isUploading"
-          @change="handleFileChange"
-      />
+      <div class="flex flex-col pt-4">
+        <input class="input validator w-full" required v-model="directoryName" :placeholder="t('mkdir.placeholder')"
+               pattern="^[a-zA-Z0-9_.\-]{1,255}$"
+               :title="t('mkdir.placeholder')"/>
+        <p class="validator-hint">{{ t('mkdir.alert') }}</p>
+      </div>
       <button
           class="btn btn-primary"
-          :disabled="!selectedFile || isUploading"
-          @click="uploadFile"
+          :disabled="(directoryName === '') || isUploading"
+          @click="createDirectory"
       >
-        {{ t('upload-file.upload') }}
+        {{ t('mkdir.confirm') }}
       </button>
     </div>
   </modal>

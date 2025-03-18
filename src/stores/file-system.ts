@@ -1,6 +1,7 @@
 import {ref, computed} from 'vue'
 import {defineStore} from 'pinia'
 import type {AxiosResponse} from "axios";
+import type {FileInfo} from "@/components/pages/file-system/ts/file-system.ts";
 
 interface Response {
     data: string,
@@ -15,7 +16,7 @@ export const useFileSystemStore = defineStore('file-system-store', () => {
     /**
      * 被选中的文件列表
      */
-    const checkedFilePathList = ref<string[]>()
+    const checkedFilePathList = ref<FileInfo[]>()
 // Define a default AxiosResponse-like object
     const defaultResponse: AxiosResponse<any, any> = {
         data: new Response(), // or some default data like an empty object: {}

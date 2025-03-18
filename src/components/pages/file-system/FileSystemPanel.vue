@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref, watch } from "vue";
-import type { AxiosResponse } from "axios";
+import {nextTick, onMounted, ref, watch} from "vue";
+import type {AxiosResponse} from "axios";
 import hadoopFileSystemApi from "@/api/hadoop-file-system";
-import { useFileSystemStore } from "@/stores/file-system";
-import type { FileInfo } from "@/components/pages/file-system/ts/file-system";
+import {useFileSystemStore} from "@/stores/file-system";
+import type {FileInfo} from "@/components/pages/file-system/ts/file-system";
 import Breadcurmbs from "@/components/navigation/breadcurmbs/Breadcurmbs.vue";
 import FileSystemPagination from "@/components/pages/file-system/FileSystemPagination.vue";
 import UploadButton from "@/components/pages/file-system/button/UploadButton.vue";
@@ -13,6 +13,7 @@ import FileTable from "@/components/pages/file-system/view/table/FileTable.vue";
 import UploadModal from "@/components/pages/file-system/modal/UploadModal.vue";
 import ConfirmModal from "@/components/common/modal/ConfirmModal.vue";
 import Alert from "@/components/common/alert/Alert.vue";
+import MkdirModal from "@/components/pages/file-system/modal/MkdirModal.vue";
 
 // 定义 props 类型
 const props = defineProps<{
@@ -26,7 +27,7 @@ const currentPath = props.path ?? "/";
 // 响应式状态
 const files = ref<FileInfo[][]>([]);
 const fileSystemStore = useFileSystemStore();
-const checkedFilePathList = ref<string[]>(fileSystemStore.checkedFilePathList ?? []);
+const checkedFilePathList = ref<FileInfo[]>(fileSystemStore.checkedFilePathList ?? []);
 const paginationProps = ref({
   pageNumber: 0,
   numberPerPage: 20,
@@ -35,7 +36,7 @@ const paginationProps = ref({
 
 // 工具函数：按分页大小拆分数组
 const splitArray = (array: FileInfo[]): FileInfo[][] => {
-  const { numberPerPage } = paginationProps.value;
+  const {numberPerPage} = paginationProps.value;
   const result: FileInfo[][] = [];
   for (let i = 0; i < array.length; i += numberPerPage) {
     result.push(array.slice(i, i + numberPerPage));
@@ -67,15 +68,20 @@ const updateCurrentPage = (pageNumber: number) => {
 watch(
     () => fileSystemStore.checkedFilePathList,
     (newVal) => {
+      console.log(fileSystemStore.checkedFilePathList);
       checkedFilePathList.value = newVal ?? [];
     }
 );
 
 // 删除文件
 const confirmDelete = async () => {
-  const deletePromises = checkedFilePathList.value.map((file) =>
-      hadoopFileSystemApi.deleteFile(file)
-  );
+
+  const deletePromises = checkedFilePathList.value.map((file) => {
+    if (!file.directory) {
+      return hadoopFileSystemApi.deleteFile(file.pathInHdfs)
+    }
+    return hadoopFileSystemApi.deleteDirectory(file.pathInHdfs);
+  });
 
   try {
     const response = await Promise.all(deletePromises);
@@ -99,7 +105,7 @@ const refreshTable = () => {
   fetchFiles();
 };
 
-const isRequestSuccess =() => {
+const isRequestSuccess = () => {
   console.log(fileSystemStore.response)
 }
 
@@ -114,27 +120,27 @@ const isRequestSuccess =() => {
 
   <Alert
       :is-show="fileSystemStore.isAlertShow"
-      :content="fileSystemStore.alertContent"
+      :content="fileSystemStore.alertContent ?? 'Error' "
       :mode="fileSystemStore.alertMode"
   />
   <div>
     <!-- 面包屑导航和操作按钮 -->
     <div class="grid w-full max-w-full grid-cols-6 gap-4">
       <div class="col-span-5 rounded-sm border border-color-gray px-2 pr-2">
-        <Breadcurmbs :path="currentPath" />
+        <Breadcurmbs :path="currentPath"/>
       </div>
       <div class="col-span-1">
         <div class="flex justify-end join">
-          <UploadButton class="join-item" />
-          <CreateFolderButton class="join-item" />
-          <DeleteButton class="join-item" for="delete" />
+          <UploadButton class="join-item"/>
+          <CreateFolderButton class="join-item"/>
+          <DeleteButton class="join-item" for="delete"/>
         </div>
       </div>
     </div>
 
     <!-- 文件表格 -->
     <div>
-      <FileTable :pagination-props="paginationProps" :files="files" />
+      <FileTable :pagination-props="paginationProps" :files="files"/>
     </div>
 
     <!-- 分页组件 -->
@@ -154,7 +160,8 @@ const isRequestSuccess =() => {
     </div>
 
     <!-- Modal -->
-    <UploadModal :path="currentPath" :refresh-page-function="refreshTable" />
+    <UploadModal :path="currentPath" :refresh-page-function="refreshTable"/>
+    <MkdirModal :path="currentPath" :refresh-page-function="refreshTable"/>
     <ConfirmModal
         v-if="checkedFilePathList.length > 0"
         id="delete"

@@ -20,5 +20,11 @@ export default {
     "upload-file": {
         "upload-file": "Upload file",
         "upload": "Upload"
+    },
+    "mkdir": {
+        "create-directory":"Create directory",
+        "placeholder":"Directory name",
+        "confirm":"Create",
+        "alert":"Directory name is invalid.",
     }
 }

@@ -7,7 +7,7 @@ import IconCreateFolder from "@/components/icons/IconCreateFolder.vue";
   <div>
     <label
         class="btn btn-ghost p-2 border-color-gray"
-        for=""
+        for="mkdir"
     >
       <icon-create-folder></icon-create-folder>
 

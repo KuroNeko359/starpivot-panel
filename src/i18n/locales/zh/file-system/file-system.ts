@@ -20,5 +20,11 @@ export default {
     "upload-file": {
         "upload-file": "文件上传",
         "upload": "上传"
+    },
+    "mkdir": {
+        "create-directory":"创建目录",
+        "placeholder":"目录名",
+        "confirm":"创建",
+        "alert":"目录名不合法"
     }
 }

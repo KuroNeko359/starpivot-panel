@@ -84,3 +84,4 @@ export function pathStringToList(pathString: string) {
     let pathSlice = pathString.split("/").filter( item => item !== '');
     return pathSlice;
 }
+

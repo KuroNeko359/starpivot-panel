@@ -40,7 +40,7 @@ const t = getT()
 // 状态管理
 const currentPage = ref(props.paginationProps.currentPage)
 const isCheckedAll = ref(false)
-const checkedFilePathList = ref<string[]>([])
+const checkedFilePathList = ref<FileInfo[]>([])
 const showDetails = ref<Record<string, boolean>>({})
 
 // 计算属性：当前页文件列表
@@ -55,6 +55,7 @@ watch(() => props.paginationProps.currentPage, (newPage) => {
 
 //监听checkedFilePathList的变化，如果发生变化则更新到Store中
 watch(checkedFilePathList, (newPaths) => {
+  console.log(checkedFilePathList)
   fileSystemStore.checkedFilePathList = newPaths
 })
 
@@ -76,7 +77,7 @@ const toggleAllCheckboxes = (event: Event) => {
   isCheckedAll.value = (event.target as HTMLInputElement).checked
   //如果isCheckedAll为true，把当前列表的所有内容更新到checkedFilePathList
   checkedFilePathList.value = isCheckedAll.value
-      ? currentFiles.value.map(file => file.pathInHdfs)
+      ? currentFiles.value
       : []
 }
 
@@ -134,7 +135,7 @@ onMounted(() => {
               type="checkbox"
               class="checkbox"
               v-model="checkedFilePathList"
-              :value="file.pathInHdfs"
+              :value="file"
           />
         </td>
         <td class="text-base">{{ file.permissionString }}</td>

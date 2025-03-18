@@ -11,7 +11,6 @@ const props = defineProps({
     default: ""
   }
 });
-console.log("1")
 </script>
 
 <template>

@@ -1,9 +1,15 @@
 import apiClient from "./index.ts";
 import api from "./index.ts";
-
 // 在上传文件时 200-599 都视为成功
 const validateStatus = (status: number) => {
     return status >= 200 && status < 600;
+}
+
+const formDataConfig = {
+    headers: {
+        'Content-Type': 'multipart/form-data',
+    },
+    validateStatus
 }
 
 const hadoopFileSystemApi = {
@@ -12,12 +18,20 @@ const hadoopFileSystemApi = {
      * @param file 关于文件的FormData
      */
     uploadFile(file: FormData) {
-        return apiClient.post('/hdfs/upload-file', file, {
-            headers: {
-                'Content-Type': 'multipart/form-data',  // 自动由 FormData 处理，但手动设置也可以
-            },
-            validateStatus
-        });
+        return apiClient.post('/hdfs/upload-file', file, formDataConfig);
+    },
+    /**
+     * 创建文件夹
+     * @param currentPath 当前目录
+     * @param directoryName 文件夹名
+     */
+    mkdir(currentPath: string, directoryName: string) {
+
+        let params = new FormData();
+        let directoryPath = currentPath === '/' ? `/${directoryName}` : `${currentPath}/${directoryName}`;
+        params.append("path", directoryPath);
+        console.log(params);
+        return apiClient.post('/hdfs/mkdir', params, formDataConfig);
     },
     /**
      * 从HDFS获取文件列表
@@ -60,12 +74,13 @@ const hadoopFileSystemApi = {
         const params = new FormData();
         params.append("path", path)
         console.log(params)
-        return apiClient.post('/hdfs/delete-file', params, {
-            headers: {
-                'Content-Type': 'multipart/form-data',  // 自动由 FormData 处理，但手动设置也可以
-            },
-            validateStatus
-        });
+        return apiClient.post('/hdfs/delete-file', params, formDataConfig);
+    },
+    //TODO 未实现
+    deleteDirectory(path: string) {
+        const params = new FormData();
+        params.append("path", path)
+        return apiClient.post('/hdfs/delete-directory', params, formDataConfig);
     }
 
 }
