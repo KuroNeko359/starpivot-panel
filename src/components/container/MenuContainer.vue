@@ -19,8 +19,17 @@ let {t} = useI18n();
 
     <!-- 布局连接组件，包裹主要的菜单内容 -->
     <join-component>
-      <!-- 第一个可折叠子菜单，标题通过国际化获取 -->
+      <!-- 第一个可折叠子菜单-->
       <collapsible-submenu :title="t('menu.index.title')">
+        <!-- 组件页 TODO国际化-->
+        <menu-directory title="组件">
+          <menu-item title="Hadoop" route="/setup/hadoop">
+          </menu-item>
+          <menu-item title="HBase" route="/setup/hbase">
+          </menu-item>
+          <menu-item title="Flink" route="/setup/flink">
+          </menu-item>
+        </menu-directory>
         <!-- 主页菜单项，包含标题和路由 -->
         <menu-item
             :title="t('menu.index.home-page')"
@@ -30,6 +39,57 @@ let {t} = useI18n();
         <!-- 集群资源目录，包含嵌套的菜单项 -->
         <menu-directory
             :title="t('menu.index.cluster-resource.title')">
+          <!--Hadoop菜单-->
+          <menu-directory title="Hadoop">
+            <menu-item
+                title="Overview"
+                route="/hadoop/overview">
+            </menu-item>
+            <menu-item
+                title="Datanodes"
+                route="/hadoop/datanodes">
+            </menu-item>
+            <menu-item
+                title="Datanode Volume Failures"
+                route="/hadoop/datanode-volume-failures">
+            </menu-item>
+            <menu-item
+                title="Snapshot"
+                route="/hadoop/snapshot">
+            </menu-item>
+            <menu-item
+                title="Startup Progress"
+                route="/hadoop/startup-progress">
+            </menu-item>
+            <menu-directory title="Utilities">
+              <menu-item
+                  title="Browse the file system"
+                  route="/explore">
+              </menu-item>
+              <!--TODO除了文件系统，其他功能暂未实现-->
+              <menu-item
+                  title="Logs"
+                  route="/">
+              </menu-item>
+              <menu-item
+                  title="Log level"
+                  route="/">
+              </menu-item>
+              <menu-item
+                  title="Log level"
+                  route="/">
+              </menu-item>
+              <menu-item
+                  title="Metrics"
+                  route="/">
+              </menu-item>
+              <menu-item
+                  title="Process Thead Dump"
+                  route="/">
+              </menu-item>
+            </menu-directory>
+          </menu-directory>
+
           <!-- 资源面板菜单项 -->
           <menu-item
               :title="t('menu.index.cluster-resource.resource-panel')"

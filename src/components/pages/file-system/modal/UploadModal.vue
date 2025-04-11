@@ -44,7 +44,7 @@ const uploadFile = async () => {
     formData.append('path', props.path)
 
     const response = await hadoopFileSystemApi.uploadFile(formData)
-    //更新store
+     //更新store
     fileSystemStore.updateStore(response)
     // 重置状态
     resetForm()
