@@ -1,8 +1,8 @@
 export default {
     "menu": {
         "index": {
-            "title": "IconHome Page",
-            "home-page": "IconHome Page",
+            "title": "Home Page",
+            "home-page": "Home Page",
             "cluster-resource": {
                 "title": "Cluster Resource",
                 "resource-panel": "Resource Panel",
