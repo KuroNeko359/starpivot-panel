@@ -69,23 +69,23 @@ let {t} = useI18n();
               <!--TODO除了文件系统，其他功能暂未实现-->
               <menu-item
                   title="Logs"
-                  route="/">
+                  route="/logs">
               </menu-item>
               <menu-item
                   title="Log level"
-                  route="/">
-              </menu-item>
-              <menu-item
-                  title="Log level"
-                  route="/">
+                  route="/log-level">
               </menu-item>
               <menu-item
                   title="Metrics"
-                  route="/">
+                  route="/metrics">
+              </menu-item>
+              <menu-item
+                  title="Configuration"
+                  route="/configuration">
               </menu-item>
               <menu-item
                   title="Process Thead Dump"
-                  route="/">
+                  route="/process-thead-dump">
               </menu-item>
             </menu-directory>
           </menu-directory>

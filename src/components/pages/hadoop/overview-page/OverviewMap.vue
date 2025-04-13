@@ -1,0 +1,31 @@
+<script setup lang="ts">
+import {computed} from "vue";
+
+let props = defineProps({
+  data: {
+    type: Object,
+    required: true,
+  }
+});
+
+const keys = computed(() => Object.keys(props.data));
+
+
+</script>
+
+<template>
+  <div class="overflow-x-auto  border border-base-content/5 bg-base-100">
+    <table class="table">
+      <tbody>
+      <tr v-if="keys.length > 0" v-for="key in keys" :key="key">
+        <th>{{ key }}:</th>
+        <td>{{ props.data[key] }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

@@ -5,7 +5,7 @@ import NodeManagerInformation from "@/components/pages/NodeManagerInformation.vu
 import FileSystemPage from "@/components/pages/file-system/FileSystemPage.vue";
 import SetupPage from "@/components/pages/setup/SetupPage.vue";
 import HadoopSetupPage from "@/components/pages/setup/HadoopSetupPage.vue";
-import OverviewPage from "@/components/pages/hadoop/OverviewPage.vue";
+import OverviewPage from "@/components/pages/hadoop/overview-page/OverviewPage.vue";
 import DatanodesPage from "@/components/pages/hadoop/DatanodesPage.vue";
 import DatanodeVolumeFailuresPage from "@/components/pages/hadoop/DatanodeVolumeFailuresPage.vue";
 import SnapshotPage from "@/components/pages/hadoop/SnapshotPage.vue";

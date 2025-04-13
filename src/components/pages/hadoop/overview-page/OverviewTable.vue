@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  OverviewPage
+
 </template>
 
 <style scoped>
