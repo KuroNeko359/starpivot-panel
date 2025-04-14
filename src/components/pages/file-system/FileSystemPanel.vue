@@ -129,12 +129,10 @@ const isRequestSuccess = () => {
       <div class="col-span-5 rounded-sm border border-color-gray px-2 pr-2">
         <Breadcurmbs :path="currentPath"/>
       </div>
-      <div class="col-span-1">
-        <div class="flex justify-end join">
-          <UploadButton class="join-item"/>
-          <CreateFolderButton class="join-item"/>
-          <DeleteButton class="join-item" for="delete"/>
-        </div>
+      <div class="col-span-1 grid grid-cols-3 justify-self-end">
+        <div class="col-span-1"><UploadButton class="join-item"/></div>
+        <div class="col-span-1"><CreateFolderButton class="join-item"/></div>
+        <div class="col-span-1"><DeleteButton class="join-item" for="delete"/></div>
       </div>
     </div>
 

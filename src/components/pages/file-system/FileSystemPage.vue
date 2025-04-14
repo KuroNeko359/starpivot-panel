@@ -41,9 +41,20 @@ const refreshPanel = () => {
 </script>
 
 <template>
-  <card :title="t('file-system')" class="w-full">
-    <FileSystemPanel :refreshFunction="refreshPanel" :key="refreshKey" :path="filePath"></FileSystemPanel>
-  </card>
+  <div class="grid grid-cols-20">
+    <div>
+
+    </div>
+    <div class="col-span-18">
+      <card :title="t('file-system')" class="w-full">
+        <FileSystemPanel :refreshFunction="refreshPanel" :key="refreshKey" :path="filePath"></FileSystemPanel>
+      </card>
+    </div>
+    <div>
+
+    </div>
+  </div>
+
 </template>
 
 <style scoped>

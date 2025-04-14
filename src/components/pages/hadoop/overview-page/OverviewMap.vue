@@ -1,14 +1,23 @@
 <script setup lang="ts">
-import {computed} from "vue";
+import {computed, type PropType} from "vue";
+import {
+  getValueFormatByType,
+  type ValueAndType,
+  MapDataTypes
+} from "@/components/pages/hadoop/overview-page/overview-map/overview-map.ts";
+
 
 let props = defineProps({
   data: {
-    type: Object,
+    type: Object as PropType<Record<string, ValueAndType>>,
     required: true,
   }
 });
 
+
 const keys = computed(() => Object.keys(props.data));
+
+console.log(props.data)
 
 
 </script>
@@ -19,7 +28,7 @@ const keys = computed(() => Object.keys(props.data));
       <tbody>
       <tr v-if="keys.length > 0" v-for="key in keys" :key="key">
         <th>{{ key }}:</th>
-        <td>{{ props.data[key] }}</td>
+        <td>{{ getValueFormatByType(props.data[key]) }}</td>
       </tr>
       </tbody>
     </table>
