@@ -64,7 +64,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="chart-container h-100 w-full" ref="chartRef"></div>
+  <div class=" h-100 w-full" ref="chartRef"></div>
 </template>
 
 <style scoped>

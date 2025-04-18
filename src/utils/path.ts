@@ -1,3 +1,8 @@
 export class Path {
-    public SEPARATOR = "/";
+    private SEPARATOR = "/";
+
+    constructor() {
+    }
+
+
 }

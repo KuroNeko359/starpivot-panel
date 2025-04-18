@@ -28,24 +28,54 @@ const handleFileChange = (event: Event) => {
   selectedFile.value = target.files?.[0] ?? null
 }
 
-// 文件上传
+// 文件上传 用于控制是否进行文件上传
 const uploadFile = async () => {
+  let isFileExist = await verifyFileExist();
+  console.log(isFileExist)
+  if (!isFileExist) {
+    console.log("Updating file..")
+    await handleUploadFile();
+  }
+}
+// TODO 解决一下文件长度是1024整数倍的问题
+const verifyFileExist = async () => {
+  console.log(selectedFile.value?.name)
+  const separator = props.path.endsWith('/') ? '' : '/';
+  const fullPath = `${props.path}${separator}${selectedFile.value?.name}`;
+  let fileExistResponse = await hadoopFileSystemApi.fileExist(fullPath);
+  if (fileExistResponse.data.statusCode === 200) {
+    console.log(fileExistResponse.data)
+    fileSystemStore.updateStore(fileExistResponse);
+    return true;
+  }
+  return false;
+}
+
+// 处理文件上传的方法
+const handleUploadFile = async () => {
   if (!selectedFile.value) {
-    console.error('No file selected')
-    return
+    console.error('No file selected');
+    return;
   }
 
-  if (isUploading.value) return
+  //防止双击
+  if (isUploading.value) return;
+  isUploading.value = true;
 
-  isUploading.value = true
   try {
-    const formData = new FormData()
-    formData.append('file', selectedFile.value)
-    formData.append('path', props.path)
 
-    const response = await hadoopFileSystemApi.uploadFile(formData)
-     //更新store
-    fileSystemStore.updateStore(response)
+    let chunks = fileSlice(selectedFile.value, 1024 * 1024 * 10);
+    for (const chunk of chunks) {
+      const formData = new FormData()
+      // formData.append('file', selectedFile.value)
+      formData.append('path', props.path)
+      formData.append('fileName', selectedFile.value?.name)
+      formData.append('file', chunk)
+      console.log("chunk.size:"+chunk.size)
+      const response = await hadoopFileSystemApi.uploadFile(formData)
+      //更新store
+      fileSystemStore.updateStore(response)
+    }
     // 重置状态
     resetForm()
     props.refreshPageFunction()
@@ -57,6 +87,18 @@ const uploadFile = async () => {
   }
 }
 
+// 文件切片
+const fileSlice = (file: File, partSize: number) => {
+  let start = 0;
+  let chunks = [];
+  while (start < file.size) {
+    // 动态计算end位置，防止超出文件范围
+    const end = Math.min(start + partSize, file.size);
+    chunks.push(file.slice(start, end));
+    start = end; // 移动start到下一个分片起始位置
+  }
+  return chunks;
+}
 
 
 // 重置表单

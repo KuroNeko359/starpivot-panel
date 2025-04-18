@@ -1,3 +1,4 @@
+import {Path} from "@/utils/path.ts";
 
 let url = new URL("hdfs://hadoop102:8080/starpivot");
 

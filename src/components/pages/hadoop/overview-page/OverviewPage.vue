@@ -2,7 +2,7 @@
 import hadoopNativeServiceApi from "@/api/hadoop-native-service.ts";
 import {onMounted, type Ref, ref} from "vue";
 import OverviewTitle from "@/components/pages/hadoop/overview-page/OverviewTitle.vue";
-import OverviewMap from "@/components/pages/hadoop/overview-page/OverviewMap.vue";
+import OverviewMap from "@/components/pages/hadoop/overview-page/overview-map/OverviewMap.vue";
 import {
   getValueFormatByType,
   MapDataTypes,
@@ -188,7 +188,7 @@ onMounted(() => {
       <overview-title content="Summary"/>
 
       <overview-map :data="summaryTableData"></overview-map>
-
+      <!--TODO 还有两个表格未完成-->
     </div>
     <div class="col-span-1"></div>
   </div>

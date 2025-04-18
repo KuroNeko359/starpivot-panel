@@ -9,6 +9,7 @@ const formDataConfig = {
     headers: {
         'Content-Type': 'multipart/form-data',
     },
+    maxBodyLength: 117003161 * 2, // 100MB
     validateStatus
 }
 
@@ -81,6 +82,10 @@ const hadoopFileSystemApi = {
         const params = new FormData();
         params.append("path", path)
         return apiClient.post('/hdfs/delete-directory', params, formDataConfig);
+    },
+    fileExist(path: string) {
+        const params = {'path': path};
+        return apiClient.get('/hdfs/file-exist' , { params });
     }
 
 }
