@@ -8,6 +8,10 @@ let props = defineProps({
     required: false,
     type: Number,
     default: 4
+  },
+  underLine: {
+    required: false,
+    default: false
   }
 });
 </script>
@@ -17,7 +21,7 @@ let props = defineProps({
     <p :class="`text-${props.size}xl`">{{ props.content }}
     </p>
   </div>
-  <div class="divider"></div>
+  <div v-if="props.underLine" class="divider"></div>
 </template>
 
 <style scoped>
