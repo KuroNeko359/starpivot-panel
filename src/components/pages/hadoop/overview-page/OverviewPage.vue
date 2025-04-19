@@ -8,49 +8,21 @@ import {
   MapDataTypes,
   type ValueAndType
 } from "@/components/pages/hadoop/overview-page/overview-map/overview-map.ts";
+import {
+  type ResponseData,
+  type IResponse,
+  type MemoryUsage,
+  type StorageTypeStatsValue,
+  getProperty
+} from "@/components/pages/hadoop/ts/response/response.ts";
 
 let overviewInfo = ref<Record<string, string>>({});
 let overviewTableData = ref<Record<string, ValueAndType>>({});
 let summaryTableData = ref<Record<string, ValueAndType>>({});
 
-interface ResponseData {
-  beans: Array<Record<string, any>>;
-}
 
-interface StorageTypeStatsValue {
-  blockPoolUsed: number,
-  capacityNonDfsUsed: number,
-  capacityRemaining: number,
-  capacityTotal: number,
-  capacityUsed: number,
-  nodesInService: number
-}
 
-interface StorageTypeStats {
-  value: Array<Record<string, StorageTypeStatsValue>>;
-}
 
-interface IResponse {
-  nameNodeInfoResponse: ResponseData,
-  nameNodeStatusResponse: ResponseData,
-  fsNamesystemStateResponse: ResponseData,
-  fsNamesystemResponse: ResponseData,
-  replicatedBlocksStateResponse: ResponseData,
-  ecBlockGroupsStateResponse: ResponseData,
-  blockStatsResponse: ResponseData,
-  memoryResponse: ResponseData,
-}
-
-interface MemoryUsage {
-  committed: number,
-  init: number,
-  max: number,
-  used: number,
-}
-
-const getProperty = (response: ResponseData, propertyName: string, propertyType: MapDataTypes) => {
-  return {value: response["beans"][0][propertyName], type: propertyType};
-}
 
 const getJmx = async () => {
   let responses = await sendRequest();

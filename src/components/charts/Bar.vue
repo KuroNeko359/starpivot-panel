@@ -1,52 +1,98 @@
 <script setup lang="ts">
 import * as echarts from 'echarts';
-import {onMounted, ref} from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { type ECharts } from 'echarts';
 
-let props = defineProps({
-  xAxis: {
-    type: Array<string>,
-    required: true
+const props = defineProps({
+  xAxisData: {
+    type: Array as () => string[],
+    required: true,
   },
   series: {
-    type: Array<number>,
-  }
+    type: Array as () => number[],
+    required: true,
+  },
+  refresh: {
+    type: Function,
+  },
 });
 
-let chartRef = ref<HTMLElement | null>(null);
+const chartRef = ref<HTMLElement | null>(null);
+const chart = ref<ECharts>();
+const dataSeries = ref<number[]>([]);
 
 const option = ref({
   xAxis: {
     type: 'category',
-    data: props.xAxis,
+    data: props.xAxisData,
+    name: 'Usage Rate %',
   },
   yAxis: {
-    type: 'value'
+    type: 'value',
+    minInterval: 1,
   },
   series: [
     {
       data: props.series,
-      type: 'bar'
-    }
-  ]
+      type: 'bar',
+    },
+  ],
 });
 
 const initChart = () => {
+  dataSeries.value = props.series;
   if (chartRef.value) {
-    const chart = echarts.init(chartRef.value);
-    chart.setOption(option.value);
+    chart.value = echarts.init(chartRef.value, null, {
+      renderer: 'svg',
+    });
+    chart.value.setOption(option.value);
   }
-}
+  window.addEventListener('resize', handleResize);
+};
+
+const handleResize = () => {
+  if (chart.value) {
+    chart.value.resize();
+  }
+};
 
 onMounted(() => {
   initChart();
-})
+});
 
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
+
+// 响应式更新图表数据
+watch(() => props.series, (newSeries) => {
+  dataSeries.value = newSeries;
+  if (chart.value) {
+    chart.value.setOption({
+      series: [
+        {
+          ...option.value.series[0],
+          data: newSeries,
+        },
+      ],
+    });
+  }
+});
+
+watch(() => props.xAxisData, (newXAxis) => {
+  if (chart.value) {
+    chart.value.setOption({
+      xAxis: {
+        ...option.value.xAxis,
+        data: newXAxis,
+      },
+    });
+  }
+});
 </script>
 
 <template>
-  <div class="chart-container h-100 w-full" ref="chartRef">
-
-  </div>
+  <div class="chart-container h-100 w-full" ref="chartRef"></div>
 </template>
 
 <style scoped>
