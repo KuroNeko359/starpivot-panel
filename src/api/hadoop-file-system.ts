@@ -86,6 +86,9 @@ const hadoopFileSystemApi = {
     fileExist(path: string) {
         const params = {'path': path};
         return apiClient.get('/hdfs/file-exist' , { params });
+    },
+    getLogs(logName: string) {
+        return apiClient.get(`/logs/${logName}`);
     }
 
 }

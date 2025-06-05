@@ -11,13 +11,22 @@ let t = getT();
 
 <template>
   <div class="flex flex-row flex-wrap">
-    <Card :title="t('physical-memory-usage-rate')">
-      <memory-circle type="system" pie-name="system"></memory-circle>
-    </Card>
+    <div class="grid grid-cols-3 w-full">
+      <div class="col-span-1 p-2">
+        <Card :title="t('physical-memory-usage-rate')">
+          <memory-circle type="system" pie-name="system"></memory-circle>
+        </Card>
+      </div>
+      <div class="col-span-1 p-2">
+        <Card :title="t('jvm-memory-usage-rate')">
+          <memory-circle type="jvm" pie-name="jvm"></memory-circle>
+        </Card>
+      </div>
+      <div class="col-span-1 p-2"></div>
+      <div class="col-span-1 p-2">
 
-    <Card :title="t('jvm-memory-usage-rate')">
-      <memory-circle type="jvm" pie-name="jvm"></memory-circle>
-    </Card>
+      </div>
+    </div>
 
     <modal name="jvm" :title="t('jvm-memory-usage-rate')">
       <MemoryPie type="jvm" pie-name="jvm"></MemoryPie>

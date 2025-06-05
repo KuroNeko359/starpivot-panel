@@ -10,6 +10,10 @@ import DatanodesPage from "@/components/pages/hadoop/datanode-info-page/Datanode
 import DatanodeVolumeFailuresPage from "@/components/pages/hadoop/DatanodeVolumeFailuresPage.vue";
 import SnapshotPage from "@/components/pages/hadoop/SnapshotPage.vue";
 import StartupProgressPage from "@/components/pages/hadoop/StartupProgressPage.vue";
+import LogsPage from "@/components/pages/hadoop/LogsPage.vue";
+import InstallationPage from "@/components/pages/hadoop/setup-page/InstallationPage.vue";
+import LoginPage from "@/components/pages/LoginPage.vue";
+import RegisterPage from "@/components/pages/RegisterPage.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -36,6 +40,18 @@ const router = createRouter({
             props: route => ({path: route.query.path})
         },
         {
+            path: "/logs/:logsName",
+            name: "LogsPage",
+            component: LogsPage,
+            props: true
+        },
+        {
+            path: "/logs",
+            name: "LogsPage",
+            component: LogsPage,
+            props: true
+        },
+        {
             path: "/setup",
             children: [
                 {
@@ -44,7 +60,9 @@ const router = createRouter({
                 },
                 {
                     path: "hadoop",
-                    component: HadoopSetupPage
+                    children: [
+                        {path: 'installation', component: InstallationPage},
+                    ]
                 }
             ]
         },
@@ -74,8 +92,17 @@ const router = createRouter({
                 {
                     path: "startup-progress",
                     component: StartupProgressPage
-                }
+                },
+
             ]
+        },
+        {
+            path:"/login",
+            component: LoginPage
+        },
+        {
+            path:'/register',
+            component: RegisterPage
         }
 
     ]

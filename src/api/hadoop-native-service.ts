@@ -1,6 +1,9 @@
 import apiClient from "@/api/index.ts";
 
 const hadoopNativeServiceApi = {
+    getComponent(componentName: string) {
+        return apiClient.get(`/components/${componentName}`);
+    },
     getJmx(qry?: string | null, get?: string | null, name?: string | null) {
         let params: { [key: string]: string } = {};
         if (qry !== undefined && qry !== null) {

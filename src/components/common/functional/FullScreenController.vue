@@ -37,17 +37,7 @@ onMounted(() => {
 
 
 
-/**
- * 切换全屏状态的函数。
- * 切换 isFullScreen 的值，
- * 并将新的全屏状态信息保存到 localStorage 中。
- */
-const toggleScreenStatus = () => {
-  isFullScreen.value = !isFullScreen.value;
-  const newStatus = isFullScreen.value ? 'true' : 'false';
-  localStorage.setItem('is-full-screen', newStatus);
-  console.log(`FullScreen status changed to: ${newStatus}`);
-};
+
 </script>
 
 <template>
